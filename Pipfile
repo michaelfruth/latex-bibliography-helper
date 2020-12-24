@@ -7,6 +7,7 @@ verify_ssl = true
 
 [packages]
 requests = "*"
+bibtexparser = {git = "https://github.com/michaelfruth/python-bibtexparser.git"}
 
 [requires]
 python_version = "3.9"

@@ -73,12 +73,52 @@ class Author():
         return self.name
 
 
-def load_bibitem(publication):
-    response = requests.get(publication.url + ".bib")
+def create_display_order(bib, keys):
+    import re
+    lines = bib.splitlines()
+    order = []
+    for line in lines:
+        for key in keys:
+            if key in order:
+                break
+            if re.match("[\s]*{}[\s]*=".format(key), line):
+                order.append(key)
 
+    return order
+
+
+def load_bibitem(publication, curly_title):
+    bib_url = publication.url + ".bib"
+
+    logger.info("URL: {}".format(publication.url))
+    logger.info("BIB: {}".format(bib_url))
+
+    response = requests.get(bib_url)
     bib = response.content.decode("UTF-8")
 
-    # TODO: This is MacOS specifc only"
+    if curly_title:
+        import bibtexparser
+        from bibtexparser.bwriter import BibTexWriter
+
+        bib_database = bibtexparser.loads(bib)
+
+        # We only have one single entry -> [0]
+        # Add extra curly brackets to title
+        title = bib_database.entries[0]["title"]
+        bib_database.entries[0]["title"] = "{{{}}}".format(title)
+
+        # Apply BIB-Item style
+        writer = BibTexWriter()
+        writer.indent = " " * 2
+        writer.order_entries_by = None
+        writer.align_values = True
+
+        # Preserve order of BIB-Items from DBLP
+        writer.display_order = create_display_order(bib, [*bib_database.entries[0]])
+
+        bib = writer.write(bib_database)
+
+    # TODO: This is MacOS specific only"
     subprocess.run("pbcopy", universal_newlines=True, input=bib)
 
     print(bib)
@@ -111,7 +151,7 @@ def user_select_publication(publications):
     return publications[index]
 
 
-def main(title):
+def main(title, curly_title):
     publications = load_publications(DBLP_PUBLICATION_URL.format(title))
 
     if len(publications) == 0:
@@ -121,15 +161,16 @@ def main(title):
     publication = user_select_publication(publications)
 
     if publication is not None:
-        load_bibitem(publication)
+        load_bibitem(publication, curly_title)
 
 
 if __name__ == "__main__":
     from argparse import ArgumentParser
 
     parser = ArgumentParser()
-    parser.add_argument("title", help="Title of publication.")
+    parser.add_argument("title", help="Title of publication.", nargs="+")
+    parser.add_argument("-c", help="Set another pair of curly brackets around the tile", action="store_true")
     args = parser.parse_args()
 
-    title_to_find = args.title
-    main(title_to_find)
+    title_to_find = " ".join(args.title)
+    main(title_to_find, args.c)
