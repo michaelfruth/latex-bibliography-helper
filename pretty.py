@@ -15,11 +15,6 @@ logging.basicConfig(level=logging.INFO)
 curly_title_pattern = re.compile('^{.*}$', re.DOTALL)
 
 
-def parse(file):
-    with open(file, "r") as bib_file:
-        return bibtexparser.load(bib_file, parser=bibtexparser.bparser.BibTexParser(ignore_nonstandard_types=False))
-
-
 def pretty(bib_database, curly_title):
     if curly_title:
         for entry in bib_database.entries:
@@ -32,7 +27,7 @@ def pretty(bib_database, curly_title):
 
     # Apply BIB-Item style
     writer = BibTexWriter()
-    writer.indent = " " * 2
+    writer.indent = " " * 4
     writer.order_entries_by = None
     writer.align_values = True
 
@@ -47,8 +42,8 @@ def pretty(bib_database, curly_title):
     print("Copied to clipboard!")
 
 
-def main(file, curly_title):
-    bib_database = parse(file)
+def main(content, curly_title):
+    bib_database = bibtexparser.loads(content, parser=bibtexparser.bparser.BibTexParser(ignore_nonstandard_types=False))
     pretty(bib_database, curly_title)
 
 
@@ -56,12 +51,24 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
 
     parser = ArgumentParser()
-    parser.add_argument("file", help="The file to pretty print", nargs="+")
+
+    input = parser.add_mutually_exclusive_group(required=True)
+    input.add_argument("-f", help="The file to pretty print")
+    input.add_argument("-cb", help="Use the clipboard", action="store_true")
+
     parser.add_argument("-c", help="Set another pair of curly brackets around the tile", action="store_true")
     args = parser.parse_args()
 
-    file = " ".join(args.file)
-    if not path.isfile(file):
-        print("'{}' could not be found!".format(file))
-        exit(1)
-    main(file, args.c)
+    if args.f:
+        # File was specified
+        if not path.isfile(args.f):
+            print("'{}' could not be found!".format(args.f))
+            exit(1)
+        else:
+            with open(args.f, "r") as f:
+                content = f.read()
+            main(content, args.c)
+
+    if args.cb:
+        # Use clipboard
+        main(bib_util.copy_from_clipboard(), args.c)
