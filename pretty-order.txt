@@ -4,12 +4,10 @@ booktitle
 pages
 publisher
 year
+month
 url
 doi
 lastaccessed
 timestamp
 biburl
 bibsource
-
-
-
