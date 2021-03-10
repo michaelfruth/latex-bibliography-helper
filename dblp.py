@@ -1,6 +1,6 @@
 import requests
 import json
-import subprocess
+import bib_util
 
 import logging
 
@@ -114,12 +114,11 @@ def load_bibitem(publication, curly_title):
         writer.align_values = True
 
         # Preserve order of BIB-Items from DBLP
-        writer.display_order = create_display_order(bib, [*bib_database.entries[0]])
+        writer.display_order = bib_util.get_bib_order()
 
         bib = writer.write(bib_database)
 
-    # TODO: This is MacOS specific only"
-    subprocess.run("pbcopy", universal_newlines=True, input=bib)
+    bib_util.copy_to_clipboard(bib)
 
     print(bib)
     print("Copied to clipboard!")

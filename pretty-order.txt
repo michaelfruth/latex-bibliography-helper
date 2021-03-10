@@ -1,0 +1,15 @@
+author
+title
+booktitle
+pages
+publisher
+year
+url
+doi
+lastaccessed
+timestamp
+biburl
+bibsource
+
+
+
