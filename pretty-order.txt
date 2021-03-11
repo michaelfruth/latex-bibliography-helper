@@ -1,4 +1,5 @@
 author
+editor
 title
 booktitle
 pages
