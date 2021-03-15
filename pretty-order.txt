@@ -3,9 +3,12 @@ editor
 title
 booktitle
 pages
+series
 publisher
 year
 month
+isbn
+lccn
 url
 doi
 lastaccessed
