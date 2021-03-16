@@ -3,6 +3,9 @@ editor
 title
 booktitle
 pages
+journal
+number
+volumne
 series
 publisher
 year
