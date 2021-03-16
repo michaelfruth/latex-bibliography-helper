@@ -2,11 +2,11 @@ author
 editor
 title
 booktitle
-pages
 journal
 number
 volume
 series
+pages
 publisher
 year
 month
