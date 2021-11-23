@@ -1,1 +1,1 @@
-# dblp-finder
+# LaTex Bibliography Helper
