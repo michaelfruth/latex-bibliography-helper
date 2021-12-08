@@ -4,10 +4,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+bibtexparser = {editable = true, path = "./python-bibtexparser"}
 
 [packages]
 requests = "*"
 bibtexparser = {git = "https://github.com/michaelfruth/python-bibtexparser.git"}
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"
