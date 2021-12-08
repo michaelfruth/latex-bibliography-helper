@@ -9,6 +9,7 @@ bibtexparser = {editable = true, path = "./python-bibtexparser"}
 [packages]
 requests = "*"
 bibtexparser = {git = "https://github.com/michaelfruth/python-bibtexparser.git"}
+pyperclip = "*"
 
 [requires]
 python_version = "3.10"

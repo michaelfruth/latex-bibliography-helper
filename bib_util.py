@@ -1,4 +1,4 @@
-import subprocess
+import pyperclip
 
 
 def get_bib_order():
@@ -7,11 +7,8 @@ def get_bib_order():
 
 
 def copy_to_clipboard(input):
-    # TODO: This is MacOS specific only"
-    subprocess.run("pbcopy", universal_newlines=True, input=input)
+    pyperclip.copy(input)
 
 
 def copy_from_clipboard():
-    # TODO: This is MacOS specific only"
-    proc = subprocess.run("pbpaste", universal_newlines=True, stdout=subprocess.PIPE)
-    return proc.stdout
+    return pyperclip.paste()
