@@ -1,4 +1,12 @@
 from os import path
+import bib_util
+import json
+
+
+def prepare(config_file):
+    bib_util.config = json.load(config_file)
+    config_file.close()
+
 
 if __name__ == "__main__":
     from argparse import ArgumentParser, FileType
@@ -40,6 +48,8 @@ if __name__ == "__main__":
                                     help="Use the clipboard")
 
     args = parser.parse_args()
+    prepare(args.config_file)
+
     if args.command == "Find":
         pass
     elif args.command == "Beautify":
