@@ -1,5 +1,3 @@
-import json
-
 import pyperclip
 
 config = {
@@ -9,7 +7,6 @@ config = {
 
 def load_or_default_config(config_file) -> None:
     global config
-
 
 
 def get_bib_order():
