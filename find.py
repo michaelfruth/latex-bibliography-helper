@@ -99,7 +99,7 @@ def ask_user_for_publication(publications):
     return publications[index]
 
 
-def load_bibitem(publication, curlify, copy_to_clipboard, pretty):
+def load_bibitem(publication, curlify, pretty):
     bib_url = publication.url + ".bib"
 
     logger.info("URL: {}".format(publication.url))
@@ -108,58 +108,28 @@ def load_bibitem(publication, curlify, copy_to_clipboard, pretty):
     response = requests.get(bib_url)
     bib = response.content.decode("UTF-8")
 
-    if curlify or pretty:
-        bib_database = bibtexparser.loads(bib)
+    if not curlify and not pretty:
+        # Return result of URL immediately. No processing by BIBTeX-Parser needed.
+        return bib
 
-        # We only have one single entry -> [0]
-        bib_entry = bib_database.entries[0]
+    bib_database = bibtexparser.loads(bib)
 
-        if curlify:
-            # Add extra curly brackets to title
-            if "title" in bib_entry:
-                title = bib_entry["title"]
-                bib_entry["title"] = "{{{}}}".format(title)
+    # We only have one single entry -> [0]
+    bib_entry = bib_database.entries[0]
 
-        attributes_order = bib_util.get_bibtex_order()
+    attributes_order = bib_util.get_attributes_order()
+    if curlify:
+        bib_util.curlify_title(bib_entry)
+    if pretty:
+        bib_util.hide_attributes(bib_entry, attributes_order)
 
-        if pretty:
-            hide_attributes = bib_util.get_attribute_names_to_hide()
+    writer = bib_util.get_bibtex_writer()
 
-            hide_prefix = bib_util.get_config("style", "hidePrefix")
-            for hide_attribute in hide_attributes:
-                if hide_attribute not in bib_entry:
-                    # Nothing to hide if attribute is not contained in the BIBTeX
-                    continue
+    if bib_util.get_config("style", "sort"):
+        writer.display_order = attributes_order
 
-                new_hidden_attribute = hide_prefix + hide_attribute
-                while new_hidden_attribute in bib_entry:
-                    # The attribute exists twice, once as visible and once as hidden.
-                    # We don't want to override/delete any element.
-                    # Add more prefixes until a non-existing hidden attribute name is found.
-                    new_hidden_attribute = hide_prefix + new_hidden_attribute
-
-                bib_entry[new_hidden_attribute] = bib_entry[hide_attribute]
-                del bib_entry[hide_attribute]
-
-                # Keep the order of elements in sync
-                attributes_order = [new_hidden_attribute if ele == hide_attribute else ele for ele in attributes_order]
-
-        # Apply BIB-Item style
-        writer = BibTexWriter()
-        writer.indent = " " * 2
-        writer.order_entries_by = None
-        writer.align_values = True
-
-        if bib_util.get_config("style", "sort"):
-            # Order items
-            writer.display_order = attributes_order
-
-        bib = writer.write(bib_database)
-
-    if copy_to_clipboard:
-        bib_util.copy_to_clipboard(bib)
-
-    print(bib)
+    bib = writer.write(bib_database)
+    return bib
 
 
 def find(title, curlify, copy_to_clipboard, pretty):
@@ -175,4 +145,8 @@ def find(title, curlify, copy_to_clipboard, pretty):
     publication = ask_user_for_publication(publications)
 
     if publication:
-        load_bibitem(publication, curlify, copy_to_clipboard, pretty)
+        item = load_bibitem(publication, curlify, pretty)
+
+        if copy_to_clipboard:
+            bib_util.copy_to_clipboard(item)
+        print(item)
