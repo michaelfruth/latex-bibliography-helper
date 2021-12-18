@@ -1,5 +1,3 @@
-import pyperclip
-
 _config = None
 
 
@@ -24,14 +22,46 @@ def set_config(config):
     _config = config
 
 
-def get_bib_order():
-    with open('pretty-order.txt', 'r') as f:
-        return [f.strip() for f in f.readlines() if len(f.strip()) > 0]
+def get_attribute_names_to_hide():
+    attributes = get_config("style", "attributes")
+
+    # "attributes": [
+    #   {"name": ..., "hide": true/false},
+    #   ...
+    # ]
+
+    hide = []
+    for attribute in attributes:
+        if isinstance(attribute, dict):
+            if attribute["hide"]:
+                hide.append(attribute["name"])
+
+    return hide
+
+
+def get_bibtex_order():
+    attributes = get_config("style", "attributes")
+
+    # "attributes" : [
+    #   "author",
+    #   { "name": "author", ...}
+    # ]
+
+    order = []
+    for attribute in attributes:
+        if isinstance(attribute, dict):
+            order.append(attribute["name"])
+        else:
+            order.append(attribute)
+
+    return order
 
 
 def copy_to_clipboard(content) -> None:
+    import pyperclip
     pyperclip.copy(content)
 
 
 def copy_from_clipboard() -> str:
+    import pyperclip
     return pyperclip.paste()

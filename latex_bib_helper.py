@@ -1,6 +1,10 @@
 import json
+import logging
 
 import bib_util
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def prepare(config_file):
@@ -27,12 +31,20 @@ if __name__ == "__main__":
                         dest="copy_to_clipboard",
                         action="store_true",
                         help="Copy the result into the clipboard.")
+    parser.add_argument("-v", "--verbose",
+                        dest="verbose",
+                        action="store_true",
+                        help="Verbose output")
 
     subparsers = parser.add_subparsers(dest='command',
                                        help="The functionality to use.",
                                        required=True)
 
     find_parser = subparsers.add_parser("Find")
+    find_parser.add_argument("--pretty",
+                             dest="pretty",
+                             help="Apply the style (order, hide) of attributes specified in the configuration file.",
+                             action="store_true")
     find_parser.add_argument(dest="title",
                              help="Title of publication.",
                              nargs="+")
@@ -49,10 +61,17 @@ if __name__ == "__main__":
                                     help="Use the clipboard")
 
     args = parser.parse_args()
+
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+
     prepare(args.config_file)
 
     if args.command == "Find":
-        pass
+        import find
+
+        title = " ".join(args.title)
+        find.find(title, args.curlify, args.copy_to_clipboard, args.pretty)
     elif args.command == "Beautify":
         pass
     else:
