@@ -71,20 +71,6 @@ def load_publications(url):
     return [Publication(hit) for hit in hits["hit"]]
 
 
-def create_display_order(bib, keys):
-    import re
-    lines = bib.splitlines()
-    order = []
-    for line in lines:
-        for key in keys:
-            if key in order:
-                break
-            if re.match("[\s]*{}[\s]*=".format(key), line):
-                order.append(key)
-
-    return order
-
-
 def ask_user_for_publication(publications):
     if len(publications) == 1:
         # There is no selection for the user. Return result.
