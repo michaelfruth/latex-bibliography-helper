@@ -1,12 +1,27 @@
 import pyperclip
 
-config = {
-    "attributes": []
-}
+_config = None
 
 
-def load_or_default_config(config_file) -> None:
-    global config
+def get_config(*args):
+    current_element = _config
+
+    for arg in args:
+        if not isinstance(current_element, dict):
+            raise TypeError("Trying to access a non-dictionary configuration element by key: '{}'.\n"
+                            "Element: {}".format(arg, current_element))
+        if arg not in current_element:
+            raise ValueError("Could not find/access attribute '{}' in configuration.\n"
+                             "Current element: '{}'".format(arg, current_element))
+
+        current_element = current_element[arg]
+
+    return current_element
+
+
+def set_config(config):
+    global _config
+    _config = config
 
 
 def get_bib_order():

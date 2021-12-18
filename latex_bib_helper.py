@@ -4,7 +4,8 @@ import json
 
 
 def prepare(config_file):
-    bib_util.config = json.load(config_file)
+    config = json.load(config_file)
+    bib_util.set_config(config)
     config_file.close()
 
 
