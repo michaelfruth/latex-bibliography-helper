@@ -1,6 +1,6 @@
-from os import path
-import bib_util
 import json
+
+import bib_util
 
 
 def prepare(config_file):
