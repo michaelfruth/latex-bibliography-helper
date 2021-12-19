@@ -56,8 +56,8 @@ if __name__ == "__main__":
                                     type=FileType('r', encoding='UTF-8'),
                                     help="The file to pretty print")
     pretty_input_group.add_argument("-cfc", "--copy-from-clipboard",
-                                    action="store_true",
                                     dest="input_clipboard",
+                                    action="store_true",
                                     help="Use the clipboard")
 
     args = parser.parse_args()
@@ -73,6 +73,14 @@ if __name__ == "__main__":
         title = " ".join(args.title)
         find.find(title, args.curlify, args.copy_to_clipboard, args.pretty)
     elif args.command == "Beautify":
-        pass
+        import beautify
+
+        if args.input_clipboard:
+            input = bib_util.read_from_clipboard()
+        else:
+            input_file = args.input_file
+            input = input_file.read()
+            input_file.close()
+        beautify.beautify(input, args.curlify, args.copy_to_clipboard)
     else:
         raise ValueError("Unknown ArgumentParser option: {}".format(args.command))

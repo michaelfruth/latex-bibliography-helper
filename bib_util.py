@@ -60,13 +60,14 @@ def hide_attributes(bib_entry):
 
 def order_hidden_attributes(attributes: [str], attributes_order: [str]) -> None:
     hide_prefix = get_config("style", "hidePrefix")
-
+    print(attributes_order)
     for attribute in attributes:
         if attribute.startswith(hide_prefix):
             plain_attribute = re.sub(f"^{hide_prefix}*", "", attribute)
             if plain_attribute in attributes_order:
                 index = attributes_order.index(plain_attribute)  # Get index
                 attributes_order.insert(index + 1, attribute)  # Insert hidden attribute into list containing the order
+    print(attributes_order)
 
 
 def get_attribute_names_to_hide():
