@@ -121,7 +121,8 @@ def load_bibitem(publication, curlify, pretty):
     if curlify:
         bib_util.curlify_title(bib_entry)
     if pretty:
-        bib_util.hide_attributes(bib_entry, attributes_order)
+        bib_util.hide_attributes(bib_entry)
+        bib_util.order_hidden_attributes(list(bib_entry.keys()), attributes_order)
 
     writer = bib_util.get_bibtex_writer()
 

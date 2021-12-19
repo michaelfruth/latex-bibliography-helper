@@ -38,7 +38,7 @@ def curlify_title(bib_entry):
             bib_entry['title'] = "{{{}}}".format(title)
 
 
-def hide_attributes(bib_entry, attributes_order: [] = None):
+def hide_attributes(bib_entry):
     attributes_to_hide = get_attribute_names_to_hide()
 
     hide_prefix = get_config("style", "hidePrefix")
@@ -57,11 +57,16 @@ def hide_attributes(bib_entry, attributes_order: [] = None):
         bib_entry[hidden_attribute] = bib_entry[original_attribute]
         del bib_entry[original_attribute]
 
-        if attributes_order:
-            # Keep the order of elements in sync
-            for i, order_attribute in enumerate(attributes_order):
-                if original_attribute == order_attribute:
-                    attributes_order[i] = hidden_attribute
+
+def order_hidden_attributes(attributes: [str], attributes_order: [str]) -> None:
+    hide_prefix = get_config("style", "hidePrefix")
+
+    for attribute in attributes:
+        if attribute.startswith(hide_prefix):
+            plain_attribute = re.sub(f"^{hide_prefix}*", "", attribute)
+            if plain_attribute in attributes_order:
+                index = attributes_order.index(plain_attribute)  # Get index
+                attributes_order.insert(index + 1, attribute)  # Insert hidden attribute into list containing the order
 
 
 def get_attribute_names_to_hide():
