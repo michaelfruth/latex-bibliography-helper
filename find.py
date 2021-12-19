@@ -117,16 +117,17 @@ def load_bibitem(publication, curlify, pretty):
     # We only have one single entry -> [0]
     bib_entry = bib_database.entries[0]
 
-    attributes_order = bib_util.get_attributes_order()
     if curlify:
         bib_util.curlify_title(bib_entry)
     if pretty:
         bib_util.hide_attributes(bib_entry)
-        bib_util.order_hidden_attributes(list(bib_entry.keys()), attributes_order)
 
     writer = bib_util.get_bibtex_writer()
 
     if bib_util.get_config("style", "sort"):
+        attributes_order = bib_util.get_attributes_order()
+        bib_util.order_hidden_attributes(list(bib_entry.keys()), attributes_order)
+
         writer.display_order = attributes_order
 
     bib = writer.write(bib_database)
