@@ -43,13 +43,21 @@ def set_config_or_default(config=None):
 
 
 def extract_booktitle_shortname(booktitle: str) -> Union[str, None]:
-    """Match the shortname of the booktitle.
-        Example:
-        The following patterns will be recognized:
-        - Shortname followed by year: ... {TEST} 2015 ....
-        - Shortname at the end: ... {TEST}
-        - Shortname at the beginning: {TEST} '15...
+    """
+    Tries to extract the shortname of the booktitle of a publication. Curly brackets around the title are ignored and
+    won't be returned either.
 
+    The following patterns will be recognized.:
+    - Shortname followed by year: ... {SHORTNAME} YEAR ....
+    - Example: 43rd {ACM/IEEE} Annual ..., {ISCA} 2016, Seoul, South Korea, June 18-22, 2016
+
+    - Shortname at the end: ... {SHORTNAME}
+    - Example: 2014 IEEE International Symposium on Workload Characterization {IISWC}
+
+    - Shortname at the beginning: {SHORTNAME} 'YEAR...
+    - Example: {PACT} '20: International Conference on Parallel Architectures and Compilation Techniques
+
+    Returns the extracted shortname if found, None otherwise.
     """
     patterns = []
 
@@ -83,20 +91,20 @@ def extract_booktitle_shortname(booktitle: str) -> Union[str, None]:
     return None
 
 
-def modify_booktitle(bib_entry):
-    if "booktitle" in bib_entry:
-        booktitle = bib_entry["booktitle"]
+def curlify_title(title: str) -> str:
+    """
+    Adds a pair of curly braces to the title. If the title already contains curly brackets, nothing will happen.
 
-
-def curlify_title(bib_entry) -> None:
-    if "title" in bib_entry:
-        title = bib_entry['title']
-
-        curly_title_pattern = re.compile(r'^{.*}$', re.DOTALL)
-        # Check if curly brackets are already set
-        if not re.fullmatch(curly_title_pattern, title):
-            # Add extra curly brackets to title. Preserves lowercase/uppercase in BIBTeX
-            bib_entry['title'] = "{{{}}}".format(title)
+    Example:
+    - curlify_title("Hello") returns "{Hello}".
+    - curlify_title("{Hello}") returns "{Hello}".
+    """
+    curly_title_pattern = re.compile(r'^{.*}$', re.DOTALL)
+    # Check if curly brackets are already set
+    if not re.fullmatch(curly_title_pattern, title):
+        # Add extra curly brackets to title. Preserves lowercase/uppercase in BIBTeX
+        title = "{{{}}}".format(title)
+    return title
 
 
 def hide_attributes(bib_entry):
