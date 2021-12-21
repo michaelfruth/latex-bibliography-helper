@@ -1,20 +1,19 @@
-import importlib.resources as pkg_resources
 import json
 import logging
+import pkgutil
+import os
 
 import jsonschema
 
 import bib_util
-import resources
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def prepare(config_file):
-    with pkg_resources.open_text(resources, "config.schema.json") as f:
-        json_schema = json.load(f)
-
+    # Load
+    json_schema = json.loads(pkgutil.get_data("latex_bib_helper", "resources/config.schema.json"))
     config = json.load(config_file)
 
     # Validate
