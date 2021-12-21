@@ -1,4 +1,5 @@
 import re
+from typing import Union
 
 import pyperclip
 from bibtexparser.bwriter import BibTexWriter
@@ -41,11 +42,57 @@ def set_config_or_default(config=None):
     _config = config if config is not None else _default_config
 
 
+def extract_booktitle_shortname(booktitle: str) -> Union[str, None]:
+    """Match the shortname of the booktitle.
+        Example:
+        The following patterns will be recognized:
+        - Shortname followed by year: ... {TEST} 2015 ....
+        - Shortname at the end: ... {TEST}
+        - Shortname at the beginning: {TEST} '15...
+
+    """
+    patterns = []
+
+    shortname_year_pattern = re.compile(r'{?\w+}?(?=(\n|\r|\s)+[0-9]{4})')
+    patterns.append(shortname_year_pattern)
+
+    shortname_end_pattern = re.compile(r'{[^{]*}$')
+    patterns.append(shortname_end_pattern)
+
+    shortname_start_pattern = re.compile(r'(^{?.*}?)(?:(\n|\r|\s)+\'[0-9]{2,4})')
+    patterns.append(shortname_start_pattern)
+
+    for shortname_pattern in patterns:
+        findings = re.search(shortname_pattern, booktitle)
+        if findings:
+            # TODO: What if multiple groups were found?
+            shortname_groups = findings.groups()
+
+            if len(shortname_groups) >= 1 and len(shortname_groups[0].strip()) > 0:
+                # Use groups() for non-capturing groups
+                shortname = shortname_groups[0]
+            else:
+                shortname = findings.group(0)
+
+            # Remove curly braces
+            if shortname.startswith("{"):
+                shortname = shortname[1:]
+            if shortname.endswith("}"):
+                shortname = shortname[:-1]
+            return shortname
+    return None
+
+
+def modify_booktitle(bib_entry):
+    if "booktitle" in bib_entry:
+        booktitle = bib_entry["booktitle"]
+
+
 def curlify_title(bib_entry) -> None:
-    curly_title_pattern = re.compile('^{.*}$', re.DOTALL)
     if "title" in bib_entry:
         title = bib_entry['title']
 
+        curly_title_pattern = re.compile(r'^{.*}$', re.DOTALL)
         # Check if curly brackets are already set
         if not re.fullmatch(curly_title_pattern, title):
             # Add extra curly brackets to title. Preserves lowercase/uppercase in BIBTeX
