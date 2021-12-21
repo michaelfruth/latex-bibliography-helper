@@ -1,0 +1,37 @@
+{
+  "settings": {
+    "search": {
+      "publicationUrl": "http://dblp.org/search/publ/api?q={}&format=json",
+      "authorUrl": "http://dblp.org/search/author/api?q={}&format=json",
+      "venueUrl": "http://dblp.org/search/venue/api?q={}&format=json"
+    }
+  },
+  "style": {
+    "sort": true,
+    "attributes": [
+      {
+        "name": "author",
+        "hide": false
+      },
+      "editor",
+      "title",
+      "booktitle",
+      "journal",
+      "number",
+      "volume",
+      "series",
+      "pages",
+      "publisher",
+      "year",
+      "month",
+      "isbn",
+      "lccn",
+      "url",
+      "doi",
+      "lastaccessed",
+      "timestamp",
+      "biburl",
+      "bibsource"
+    ]
+  }
+}

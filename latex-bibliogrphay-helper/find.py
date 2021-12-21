@@ -124,7 +124,7 @@ def load_bibitem(publication, curlify, pretty):
 
     writer = bib_util.get_bibtex_writer()
 
-    if bib_util.get_config("style", "sort"):
+    if bib_util.get_config_property("style", "sort"):
         attributes_order = bib_util.get_attributes_order()
         bib_util.order_hidden_attributes(list(bib_entry.keys()), attributes_order)
 
@@ -135,7 +135,7 @@ def load_bibitem(publication, curlify, pretty):
 
 
 def find(title, curlify, copy_to_clipboard, pretty):
-    publications_url = bib_util.get_config("settings", "search", "publicationUrl")
+    publications_url = bib_util.get_config_property("settings", "search", "publicationUrl")
     publications_url = publications_url.format(title)  # Set title as query in  URL
 
     publications = load_publications(publications_url)

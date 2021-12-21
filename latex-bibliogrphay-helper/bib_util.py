@@ -4,9 +4,23 @@ import pyperclip
 from bibtexparser.bwriter import BibTexWriter
 
 _config = None
+_default_config = {
+    "settings": {
+        "search": {
+            "publicationUrl": "http://dblp.org/search/publ/api?q={}&format=json",
+            "authorUrl": "http://dblp.org/search/author/api?q={}&format=json",
+            "venueUrl": "http://dblp.org/search/venue/api?q={}&format=json"
+        }
+    },
+    "style": {
+        "hidePrefix": "_",
+        "sort": True,
+        "attributes": []
+    }
+}
 
 
-def get_config(*args):
+def get_config_property(*args):
     current_element = _config
 
     for arg in args:
@@ -22,9 +36,9 @@ def get_config(*args):
     return current_element
 
 
-def set_config(config):
+def set_config_or_default(config=None):
     global _config
-    _config = config
+    _config = config if config is not None else _default_config
 
 
 def curlify_title(bib_entry):
@@ -41,7 +55,7 @@ def curlify_title(bib_entry):
 def hide_attributes(bib_entry):
     attributes_to_hide = get_attribute_names_to_hide()
 
-    hide_prefix = get_config("style", "hidePrefix")
+    hide_prefix = get_config_property("style", "hidePrefix")
     for original_attribute in attributes_to_hide:
         if original_attribute not in bib_entry:
             # Nothing to hide if attribute is not contained in the BIBTeX
@@ -59,7 +73,7 @@ def hide_attributes(bib_entry):
 
 
 def order_hidden_attributes(attributes: [str], attributes_order: [str]) -> None:
-    hide_prefix = get_config("style", "hidePrefix")
+    hide_prefix = get_config_property("style", "hidePrefix")
     print(attributes_order)
     for attribute in attributes:
         if attribute.startswith(hide_prefix):
@@ -71,7 +85,7 @@ def order_hidden_attributes(attributes: [str], attributes_order: [str]) -> None:
 
 
 def get_attribute_names_to_hide():
-    attributes = get_config("style", "attributes")
+    attributes = get_config_property("style", "attributes")
 
     # "attributes": [
     #   {"name": ..., "hide": true/false},
@@ -88,7 +102,7 @@ def get_attribute_names_to_hide():
 
 
 def get_attributes_order():
-    attributes = get_config("style", "attributes")
+    attributes = get_config_property("style", "attributes")
 
     # "attributes" : [
     #   "author",

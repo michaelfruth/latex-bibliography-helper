@@ -21,7 +21,7 @@ def style(bib_database, curlify):
 
     writer = bib_util.get_bibtex_writer()
 
-    if bib_util.get_config("style", "sort"):
+    if bib_util.get_config_property("style", "sort"):
         attributes_order = bib_util.get_attributes_order()
         bib_util.order_hidden_attributes(all_attributes, attributes_order)
 

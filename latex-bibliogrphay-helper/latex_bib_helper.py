@@ -1,15 +1,31 @@
+import importlib.resources as pkg_resources
 import json
 import logging
 
+import jsonschema
+
 import bib_util
+import resources
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 def prepare(config_file):
+    with pkg_resources.open_text(resources, "config.schema.json") as f:
+        json_schema = json.load(f)
+
     config = json.load(config_file)
-    bib_util.set_config(config)
+
+    # Validate
+    try:
+        jsonschema.validate(config, json_schema)
+        bib_util.set_config_or_default(config)
+    except jsonschema.exceptions.ValidationError as e:
+        logger.warn("Failed validating the configuration file.\n{}\n"
+                    "Using the default configuration.".format(e))
+        bib_util.set_config_or_default()
+
     config_file.close()
 
 
