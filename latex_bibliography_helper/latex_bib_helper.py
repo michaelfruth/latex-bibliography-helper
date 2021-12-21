@@ -1,11 +1,10 @@
 import json
 import logging
 import pkgutil
-import os
 
 import jsonschema
 
-import bib_util
+import util
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,11 +18,11 @@ def prepare(config_file):
     # Validate
     try:
         jsonschema.validate(config, json_schema)
-        bib_util.set_config_or_default(config)
+        util.set_config_or_default(config)
     except jsonschema.exceptions.ValidationError as e:
-        logger.warn("Failed validating the configuration file.\n{}\n"
-                    "Using the default configuration.".format(e))
-        bib_util.set_config_or_default()
+        logger.warning("Failed validating the configuration file.\n{}\n"
+                       "Using the default configuration.".format(e))
+        util.set_config_or_default()
 
     config_file.close()
 
@@ -91,11 +90,11 @@ if __name__ == "__main__":
         import beautify
 
         if args.input_clipboard:
-            input = bib_util.read_from_clipboard()
+            file_content = util.read_from_clipboard()
         else:
             input_file = args.input_file
-            input = input_file.read()
+            file_content = input_file.read()
             input_file.close()
-        beautify.beautify(input, args.curlify, args.copy_to_clipboard)
+        beautify.beautify(file_content, args.curlify, args.copy_to_clipboard)
     else:
         raise ValueError("Unknown ArgumentParser option: {}".format(args.command))
