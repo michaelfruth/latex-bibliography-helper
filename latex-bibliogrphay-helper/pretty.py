@@ -71,4 +71,4 @@ if __name__ == "__main__":
 
     if args.cb:
         # Use clipboard
-        main(bib_util.copy_from_clipboard(), args.c)
+        main(bib_util.read_from_clipboard(), args.c)

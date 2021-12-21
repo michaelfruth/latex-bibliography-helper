@@ -1,8 +1,9 @@
-import requests
 import json
-import bib_util
-
 import logging
+
+import requests
+
+import bib_util
 
 logger = logging.getLogger(__name__)
 
