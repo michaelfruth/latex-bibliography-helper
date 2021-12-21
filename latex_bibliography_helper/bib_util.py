@@ -41,7 +41,7 @@ def set_config_or_default(config=None):
     _config = config if config is not None else _default_config
 
 
-def curlify_title(bib_entry):
+def curlify_title(bib_entry) -> None:
     curly_title_pattern = re.compile('^{.*}$', re.DOTALL)
     if "title" in bib_entry:
         title = bib_entry['title']
