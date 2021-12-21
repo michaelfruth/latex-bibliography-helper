@@ -7,6 +7,7 @@
     }
   },
   "style": {
+    "hidePrefix": "_",
     "sort": true,
     "attributes": [
       {
