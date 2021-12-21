@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "settings": {
+      "type": "object",
+      "properties": {
+        "search": {
+          "type": "object",
+          "properties": {
+            "publicationUrl": {
+              "type": "string"
+            },
+            "authorUrl": {
+              "type": "string"
+            },
+            "venueUrl": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "publicationUrl",
+            "authorUrl",
+            "venueUrl"
+          ]
+        }
+      },
+      "required": [
+        "search"
+      ]
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "hidePrefix": {
+          "type": "string"
+        },
+        "sort": {
+          "type": "boolean"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "hide": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "name",
+                  "hide"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "hidePrefix",
+        "sort",
+        "attributes"
+      ]
+    }
+  },
+  "required": [
+    "settings",
+    "style"
+  ]
+}
