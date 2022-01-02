@@ -132,10 +132,9 @@ def load_bibitem(publication, curlify, pretty):
     attributes_order = writer.display_order
     if config.is_sort_attributes():
         # Order attributes
-        hide_prefix = config.get_hide_prefix()
         attributes_order = bibtex_handler.create_attributes_order(bib_entry.keys(),
                                                                   config.get_attribute_names(),
-                                                                  hide_prefix)
+                                                                  config.get_hide_prefix())
     writer.display_order = attributes_order
 
     bib = writer.write(bib_database)
