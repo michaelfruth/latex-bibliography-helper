@@ -43,8 +43,6 @@ def rewrite_booktitle(bib_entry: dict) -> None:
     bib_entry[key] = new_booktitle
 
 
-
-
 def hide_attributes(bib_entry: dict):
     hide_prefix = config.get_hide_prefix()
     attributes_to_hide = config.get_attribute_names(hidden_only=True)
