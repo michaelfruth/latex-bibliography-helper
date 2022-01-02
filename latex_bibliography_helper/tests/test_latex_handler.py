@@ -8,8 +8,6 @@ except ImportError:
     # pyton -m unittest tests.test_latex_handler
     import latex_handler
 
-import bibtexparser
-
 
 class TestBooktitle(unittest.TestCase):
 
