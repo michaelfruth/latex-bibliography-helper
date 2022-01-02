@@ -38,6 +38,21 @@
         "sort": {
           "type": "boolean"
         },
+        "rewriteBooktitle": {
+          "type": "object",
+          "properties": {
+            "rewrite": {
+              "type": "boolean"
+            },
+            "nameWithPlaceholder": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "rewrite",
+            "nameWithPlaceholder"
+          ]
+        },
         "attributes": {
           "type": "array",
           "items": {

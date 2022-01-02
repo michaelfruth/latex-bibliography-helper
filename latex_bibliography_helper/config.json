@@ -9,6 +9,10 @@
   "style": {
     "hidePrefix": "_",
     "sort": true,
+    "rewriteBooktitle": {
+      "rewrite": true,
+      "nameWithPlaceholder": "Proc.\\ {}"
+    },
     "attributes": [
       {
         "name": "author",

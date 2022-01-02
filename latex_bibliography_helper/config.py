@@ -10,6 +10,10 @@ _default_config = {
     "style": {
         "hidePrefix": "_",
         "sort": True,
+        "rewriteBooktitle": {
+            "rewrite": True,
+            "nameWithPlaceholder": "Proc.\\ {}"
+        },
         "attributes": []
     }
 }
@@ -21,6 +25,10 @@ def get_hide_prefix() -> str:
 
 def is_sort_attributes() -> bool:
     return get_config_property("style", "sort")
+
+
+def is_rewrite_booktitle() -> bool:
+    return get_config_property("style", "rewriteBooktitle", "rewrite")
 
 
 def get_attribute_names(hidden_only: bool = False) -> [str]:

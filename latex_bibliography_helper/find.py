@@ -123,6 +123,8 @@ def load_bibitem(publication, curlify, pretty):
         util.curlify_title(bib_entry)
     if pretty:
         util.hide_attributes(bib_entry)
+        if config.is_rewrite_booktitle():
+            util.rewrite_booktitle(bib_entry)
 
     writer = BibTexWriter()
     bibtex_handler.apply_bibtex_writer_style(writer)
