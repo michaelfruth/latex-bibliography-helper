@@ -38,10 +38,14 @@ if __name__ == "__main__":
                         type=FileType('r', encoding='UTF-8'),
                         help="The configuration file to be used.",
                         default="config.json")
-    parser.add_argument("-c", "--curly",
+    parser.add_argument("--curly",
                         dest="curlify",
                         action="store_true",
                         help="Set another pair of curly brackets around the tile")
+    parser.add_argument("--pretty",
+                             dest="pretty",
+                             help="Apply the style (order, hide) of attributes specified in the configuration file.",
+                             action="store_true")
     parser.add_argument("-ctc", "--copy-to-clipboard",
                         dest="copy_to_clipboard",
                         action="store_true",
@@ -56,10 +60,6 @@ if __name__ == "__main__":
                                        required=True)
 
     find_parser = subparsers.add_parser("Find")
-    find_parser.add_argument("--pretty",
-                             dest="pretty",
-                             help="Apply the style (order, hide) of attributes specified in the configuration file.",
-                             action="store_true")
     find_parser.add_argument(dest="title",
                              help="Title of publication.",
                              nargs="+")
@@ -96,6 +96,6 @@ if __name__ == "__main__":
             input_file = args.input_file
             file_content = input_file.read()
             input_file.close()
-        beautify.beautify(file_content, args.curlify, args.copy_to_clipboard)
+        beautify.beautify(file_content, args.curlify, args.copy_to_clipboard, args.pretty)
     else:
         raise ValueError("Unknown ArgumentParser option: {}".format(args.command))
