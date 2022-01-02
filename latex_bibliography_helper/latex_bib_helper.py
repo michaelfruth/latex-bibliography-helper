@@ -4,6 +4,7 @@ import pkgutil
 
 import jsonschema
 
+import config
 import util
 
 logging.basicConfig(level=logging.INFO)
@@ -13,16 +14,16 @@ logger = logging.getLogger(__name__)
 def prepare(config_file):
     # Load
     json_schema = json.loads(pkgutil.get_data("latex_bib_helper", "resources/config.schema.json"))
-    config = json.load(config_file)
+    json_config = json.load(config_file)
 
     # Validate
     try:
-        jsonschema.validate(config, json_schema)
-        util.set_config_or_default(config)
+        jsonschema.validate(json_config, json_schema)
+        config.set_config_or_default(json_config)
     except jsonschema.exceptions.ValidationError as e:
         logger.warning("Failed validating the configuration file.\n{}\n"
                        "Using the default configuration.".format(e))
-        util.set_config_or_default()
+        config.set_config_or_default()
 
     config_file.close()
 
