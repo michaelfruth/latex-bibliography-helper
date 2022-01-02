@@ -43,12 +43,6 @@ def rewrite_booktitle(bib_entry: dict) -> None:
     bib_entry[key] = new_booktitle
 
 
-def create_ordered_attributes(bib_entry: dict) -> [str]:
-    hide_prefix = config.get_hide_prefix()
-    ordered_attributes = bibtex_handler.create_attributes_order(bib_entry.keys(),
-                                                                config.get_attribute_names(),
-                                                                hide_prefix)
-    return ordered_attributes
 
 
 def hide_attributes(bib_entry: dict):
