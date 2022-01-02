@@ -5,7 +5,9 @@ import bibtexparser
 import requests
 from bibtexparser.bwriter import BibTexWriter
 
-import bib_util
+import config
+import util
+from handler import bibtex_handler
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +48,7 @@ class Publication:
                                                         self.year)
 
 
-class Author():
+class Author:
     def __init__(self, author):
         self.pid = author["@pid"]
         self.name = author["text"]
@@ -118,24 +120,25 @@ def load_bibitem(publication, curlify, pretty):
     bib_entry = bib_database.entries[0]
 
     if curlify:
-        bib_util.curlify_title(bib_entry)
+        util.curlify_title(bib_entry)
     if pretty:
-        bib_util.hide_attributes(bib_entry)
+        util.hide_attributes(bib_entry)
 
-    writer = bib_util.get_bibtex_writer()
+    writer = BibTexWriter()
+    bibtex_handler.apply_bibtex_writer_style(writer)
 
-    if bib_util.get_config_property("style", "sort"):
-        attributes_order = bib_util.get_attributes_order()
-        bib_util.order_hidden_attributes(list(bib_entry.keys()), attributes_order)
-
-        writer.display_order = attributes_order
+    attributes_order = []
+    if config.is_sort_attributes():
+        # Order attributes
+        attributes_order = util.create_ordered_attributes(bib_entry)
+    writer.display_order = attributes_order
 
     bib = writer.write(bib_database)
     return bib
 
 
 def find(title, curlify, copy_to_clipboard, pretty):
-    publications_url = bib_util.get_config_property("settings", "search", "publicationUrl")
+    publications_url = config.get_config_property("settings", "search", "publicationUrl")
     publications_url = publications_url.format(title)  # Set title as query in  URL
 
     publications = load_publications(publications_url)
@@ -150,5 +153,5 @@ def find(title, curlify, copy_to_clipboard, pretty):
         item = load_bibitem(publication, curlify, pretty)
 
         if copy_to_clipboard:
-            bib_util.copy_to_clipboard(item)
+            util.copy_to_clipboard(item)
         print(item)
