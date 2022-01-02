@@ -17,16 +17,24 @@ def create_attributes_order(current_attributes: [str], plain_attributes_order: [
 
     Hidden attributes will be considered for the order.
     """
-
-    final_order = [*plain_attributes_order]
+    existing_attributes_to_order = {}
     for current_attribute in current_attributes:
-        if current_attribute.startswith(hide_prefix):
-            plain_attribute = re.sub(f"^{hide_prefix}*", "", current_attribute)
-            if plain_attribute in plain_attributes_order:
-                # Plain attribute exists in the attributes to order.
-                # Get Index and Insert hidden attribute into list containing the order
-                index = final_order.index(plain_attribute)
-                final_order.insert(index + 1, current_attribute)
+        plain_attribute = re.sub(f"^{hide_prefix}*", "", current_attribute)
+        if plain_attribute in plain_attributes_order:
+            # Plain attribute exists in the attributes to order.
+            # Get Index and Insert hidden attribute into list containing the order
+            if plain_attribute not in existing_attributes_to_order:
+                existing_attributes_to_order[plain_attribute] = []
+            existing_attributes_to_order[plain_attribute].append(current_attribute)
+
+    final_order = []
+    for plain_attribute_order in plain_attributes_order:
+        if plain_attribute_order in existing_attributes_to_order:
+            existing_attributes = existing_attributes_to_order[plain_attribute_order]
+            # Sort and reverse, otherwise hide prefix might be before the plain attribute name
+            existing_attributes = reversed(sorted(existing_attributes))
+            final_order.extend(existing_attributes)
+
     return final_order
 
 
