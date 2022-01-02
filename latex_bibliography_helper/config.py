@@ -15,6 +15,14 @@ _default_config = {
 }
 
 
+def get_hide_prefix() -> str:
+    return get_config_property("style", "hidePrefix")
+
+
+def is_sort_attributes() -> bool:
+    return get_config_property("style", "sort")
+
+
 def get_config_property(*args):
     current_element = _config
 
