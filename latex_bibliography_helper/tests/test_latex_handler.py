@@ -2,11 +2,11 @@ import unittest
 
 try:
     # When executed within PyCharm
-    import latex_bibliography_helper.bib_util as bib_util
+    import latex_bibliography_helper.latex_handler as latex_handler
 except ImportError:
     # When executed in the root directory as:
-    # pyton -m unittest tests.test_bib_util
-    import bib_util
+    # pyton -m unittest tests.test_latex_handler
+    import latex_handler
 
 import bibtexparser
 
@@ -38,39 +38,39 @@ class TestBooktitle(unittest.TestCase):
             ("PACT", "{PACT} '20: International Conference on Parallel Architectures and Compilation Techniques")
         ]
         for expected, booktitle in booktitles:
-            shortname = bib_util.extract_booktitle_shortname(booktitle)
+            shortname = latex_handler.extract_booktitle_shortname(booktitle)
             self.assertEqual(expected, shortname)
 
     def test_shortname_year_single(self):
-        shortname = bib_util.extract_booktitle_shortname(
+        shortname = latex_handler.extract_booktitle_shortname(
             "2016 {IEEE} International Symposium on Workload Characterization, {IISWC} 2016, Providence, RI, USA, September 25-27, 2016")
         self.assertEqual("IISWC", shortname)
 
     def test_shortname_year_multi(self):
-        shortname = bib_util.extract_booktitle_shortname(
+        shortname = latex_handler.extract_booktitle_shortname(
             "2016 {IEEE} International Symposium on Workload Characterization, {IISWC}\n"
             "2016, Providence, RI, USA, September 25-27, 2016")
         self.assertEqual("IISWC", shortname)
 
     def test_shortname_end_single(self):
-        shortname = bib_util.extract_booktitle_shortname(
+        shortname = latex_handler.extract_booktitle_shortname(
             "2014 IEEE International Symposium on Workload Characterization {IISWC}")
         self.assertEqual("IISWC", shortname)
 
     def test_shortname_end_multi(self):
-        shortname = bib_util.extract_booktitle_shortname(
+        shortname = latex_handler.extract_booktitle_shortname(
             "2014 IEEE International Symposium\n"
             "on Workload Characterization\n"
             "{IISWC}")
         self.assertEqual("IISWC", shortname)
 
     def shortname_start_single(self):
-        shortname = bib_util.extract_booktitle_shortname(
+        shortname = latex_handler.extract_booktitle_shortname(
             "EuroSys '21: Sixteenth European Conference on Computer Systems, Online Event, United Kingdom, April 26-28, 202")
         self.assertEqual("EuroSys", shortname)
 
     def shortname_start_mutli(self):
-        shortname = bib_util.extract_booktitle_shortname(
+        shortname = latex_handler.extract_booktitle_shortname(
             "EuroSys\n"
             "'21: Sixteenth European Conference\n"
             "on Computer Systems, Online Event,\n"
@@ -78,12 +78,12 @@ class TestBooktitle(unittest.TestCase):
         self.assertEqual("EuroSys", shortname)
 
     def shortname_none_single(self):
-        shortname = bib_util.extract_booktitle_shortname(
+        shortname = latex_handler.extract_booktitle_shortname(
             "Encyclopedia of Big Data Technologies")
         self.assertEqual(None, shortname)
 
     def shortname_none_multi(self):
-        shortname = bib_util.extract_booktitle_shortname(
+        shortname = latex_handler.extract_booktitle_shortname(
             "Encyclopedia\n"
             "of Big Data\n"
             "Technologies")
@@ -92,46 +92,33 @@ class TestBooktitle(unittest.TestCase):
 
 class TestCurlify(unittest.TestCase):
 
-    def _prepare_bib(self, title):
-        bib_content = """
-@article{TestPlaceholder,
-    author        = {Max Mustermann and
-                   Lisa Mueller and
-                   Maxime Test},
-    title         = {""" + title + """},
-    journal       = {CoRR},
-    year          = {2021},
-}
-        """
-        # Title is already wrapped into {}
-        # E.g. Title = "Hello World!"
-        # Result will be: {Hello World!}
-        bib = bibtexparser.loads(bib_content)
-        return bib.entries[0]
-
-    def _curlify(self, bib_entry) -> str:
-        bib_util.curlify_title(bib_entry)
-        return bib_entry["title"]
-
     def test_do_nothing(self):
-        bib_entry = self._prepare_bib("{Hello}")
-        result = self._curlify(bib_entry)
+        result = latex_handler.curlify("{Hello}")
         self.assertEqual("{Hello}", result)
 
     def test_add_curly(self):
-        bib_entry = self._prepare_bib("Hello")
-        result = self._curlify(bib_entry)
+        result = latex_handler.curlify("Hello")
         self.assertEqual("{Hello}", result)
 
     def test_do_nothing_long(self):
-        bib_entry = self._prepare_bib("{Hello {WORLD} - {P}ython is {great}}")
-        result = self._curlify(bib_entry)
+        result = latex_handler.curlify("{Hello {WORLD} - {P}ython is {great}}")
         self.assertEqual("{Hello {WORLD} - {P}ython is {great}}", result)
 
     def test_add_curly_long(self):
-        bib_entry = self._prepare_bib("Hello {WORLD} - {P}ython is {great}")
-        result = self._curlify(bib_entry)
+        result = latex_handler.curlify("Hello {WORLD} - {P}ython is {great}")
         self.assertEqual("{Hello {WORLD} - {P}ython is {great}}", result)
+
+    def test_odd_curly_bracket_left(self):
+        result = latex_handler.curlify("{Hello")
+        self.assertEqual("{{Hello}", result)
+
+    def test_odd_curly_bracket_right(self):
+        result = latex_handler.curlify("Hello}")
+        self.assertEqual("{Hello}}", result)
+
+    def test_odd_curly_bracket_long(self):
+        result = latex_handler.curlify("{{Hello} WORLD} {HI} {{{HI } Python} 3")
+        self.assertEqual("{{{Hello} WORLD} {HI} {{{HI } Python} 3}", result)
 
 
 if __name__ == '__main__':
