@@ -2,78 +2,67 @@ import re
 
 from bibtexparser.bwriter import BibTexWriter
 
-import util
+
+def create_attributes_order(current_attributes: [str], plain_attributes_order: [str], hide_prefix: str) -> [str]:
+    """
+    Creates an order of the current attributes based on the plain attributes considering the hide prefix.
+
+    Example:
+        hide_prefix: "_"
+        current_attributes = ["author", "booktitle", "title", "_author"]
+        plain_attributes_order = ["booktitle", "author"]
+
+    Result will be:
+        ["booktitle", "author", "_author", "title"]
+
+    Hidden attributes will be considered for the order.
+    """
+
+    final_order = [*plain_attributes_order]
+    for current_attribute in current_attributes:
+        if current_attribute.startswith(hide_prefix):
+            plain_attribute = re.sub(f"^{hide_prefix}*", "", current_attribute)
+            if plain_attribute in plain_attributes_order:
+                # Plain attribute exists in the attributes to order.
+                # Get Index and Insert hidden attribute into list containing the order
+                index = final_order.index(plain_attribute)
+                final_order.insert(index + 1, current_attribute)
+    return final_order
 
 
-def hide_attribute(bib_entry):
-    attributes_to_hide = get_attribute_names_to_hide()
+def hide_attributes(bib_entry: dict, attributes_to_hide: [str], hide_prefix: str) -> None:
+    """
+    The attributes to hide are replaced by adding a prefix (hide_prefix).
+    Existing attributes are *not* overwritten, meaning the hide prefix will be concatenated as long as a non-existing
+    hidden attribute name is found. E.g.:
 
-    hide_prefix = get_config_property("style", "hidePrefix")
-    for original_attribute in attributes_to_hide:
-        if original_attribute not in bib_entry:
-            # Nothing to hide if attribute is not contained in the BIBTeX
+    Existing attributes of the bibtex entry:
+    author
+    _author
+    __author
+
+    After processing (hide_prefix set to "_"):
+    _author
+    __author
+    ___author (previous "author" attribute)
+    """
+    for attribute_name in attributes_to_hide:
+        if attribute_name not in bib_entry:
+            # Attribute does not exist. Skip it..
             continue
 
-        hidden_attribute = hide_prefix + original_attribute
-        while hidden_attribute in bib_entry:
+        # Attribute exists in bib_entry. Hide it (by replacing the name of the attribute with hide_prefix + name)!
+        hidden_attribute_name = hide_prefix + attribute_name
+        while hidden_attribute_name in bib_entry:
             # The attribute exists twice, once as visible and once as hidden.
             # We don't want to override/delete any element.
             # Add more prefixes until a non-existing hidden attribute name is found.
-            hidden_attribute = hide_prefix + hidden_attribute
+            hidden_attribute_name = hide_prefix + attribute_name
 
-        bib_entry[hidden_attribute] = bib_entry[original_attribute]
-        del bib_entry[original_attribute]
-
-
-def order_hidden_attributes(attributes: [str], order: [str]) -> None:
-    """
-    Inserts the hidden attributes into an existing attributes order. This function modifies 'order' as hidden attributes
-    get inserted.
-
-    Example:
-        Hide prefix: "_"
-        attributes = ["_author", "_booktitle", "title"]
-        order = ["author", "title"]
-    "_author" is considered as hidden attribute as it starts with the hide prefix. Actually, nothing will be ordered (
-    and a random order will be selected by the BibTeX-Parser, because the names of the attributes do not match the names
-    of the attributes to order. To get also an ordering of hidden attributes, these are inserted, based on their real
-    attribute name, at the corresponding indices in the order list.
-    The resulting order will be as follows: ["author", "_author", "title"]
-    """
-
-    hide_prefix = util.get_config_property("style", "hidePrefix")
-    for attribute in attributes:
-        if attribute.startswith(hide_prefix):
-            plain_attribute = re.sub(f"^{hide_prefix}*", "", attribute)
-            if plain_attribute in order:
-                # Plain attribute exists in the attributes to order
-                index = order.index(plain_attribute)  # Get index
-                order.insert(index + 1, attribute)  # Insert hidden attribute into list containing the order
-
-
-def get_attribute_names(only_hide=False) -> [str]:
-    """
-    Returns the names of all attributes. If 'only_hide' is set to true, only the attribute names for which the hide
-    property is set to true will be returned.
-    """
-
-    # "attributes" : [
-    #   "author",
-    #   { "name": "author", "hide": True/False, ...}
-    # ]
-    attributes = util.get_config_property("style", "attributes")
-
-    if only_hide:
-        # Keep only hidden attributes
-        attributes = [a for a in attributes if isinstance(a, dict) and a["hide"] is True]
-
-    names = []
-    for attribute in attributes:
-        if isinstance(attribute, dict):
-            names.append(attribute["name"])
-        else:
-            names.append(attribute)
-    return names
+        # Add attribute as hidden attribute
+        bib_entry[hidden_attribute_name] = bib_entry[attribute_name]
+        # Delete original "visible" attribute (without the prefix)
+        del bib_entry[attribute_name]
 
 
 def apply_bibtex_writer_style(writer: BibTexWriter) -> None:
