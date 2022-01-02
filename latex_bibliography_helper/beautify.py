@@ -27,6 +27,7 @@ def style(bib_database, curlify, pretty):
         all_attributes.update(list(bib_entry.keys()))
 
     writer = BibTexWriter()
+    bibtex_handler.apply_bibtex_writer_style(writer)
 
     attributes_order = writer.display_order
     if config.is_sort_attributes():
