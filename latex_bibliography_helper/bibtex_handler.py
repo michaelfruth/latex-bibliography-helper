@@ -65,7 +65,7 @@ def hide_attributes(bib_entry: dict, attributes_to_hide: [str], hide_prefix: str
             # The attribute exists twice, once as visible and once as hidden.
             # We don't want to override/delete any element.
             # Add more prefixes until a non-existing hidden attribute name is found.
-            hidden_attribute_name = hide_prefix + attribute_name
+            hidden_attribute_name = hide_prefix + hidden_attribute_name
 
         # Add attribute as hidden attribute
         bib_entry[hidden_attribute_name] = bib_entry[attribute_name]
