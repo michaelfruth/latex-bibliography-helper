@@ -129,7 +129,7 @@ def load_bibitem(publication, curlify, pretty):
     writer = BibTexWriter()
     bibtex_handler.apply_bibtex_writer_style(writer)
 
-    attributes_order = []
+    attributes_order = writer.display_order
     if config.is_sort_attributes():
         # Order attributes
         attributes_order = util.create_ordered_attributes(bib_entry)
