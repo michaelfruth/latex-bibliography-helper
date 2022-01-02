@@ -2,32 +2,6 @@ import re
 from typing import Union
 
 
-def create_attributes_order(current_attributes: [str], plain_attributes_order: [str], hide_prefix: str) -> [str]:
-    """
-    Creates an order of the current attributes based on the plain attributes considering the hide prefix.
-
-    Example:
-        hide_prefix: "_"
-        current_attributes = ["author", "booktitle", "title", "_author"]
-        plain_attributes_order = ["booktitle", "author"]
-
-    Result will be:
-        ["booktitle", "author", "_author", "title"]
-
-    Hidden attributes will be considered for the order.
-    """
-
-    final_order = [*plain_attributes_order]
-    for current_attribute in current_attributes:
-        if current_attribute.startswith(hide_prefix):
-            plain_attribute = re.sub(f"^{hide_prefix}*", "", current_attribute)
-            if plain_attribute in plain_attributes_order:
-                # Plain attribute exists in the attributes to order.
-                # Get Index and Insert hidden attribute into list containing the order
-                index = final_order.index(plain_attribute)
-                final_order.insert(index + 1, current_attribute)
-    return final_order
-
 
 def extract_booktitle_shortname(booktitle: str) -> Union[str, None]:
     """
