@@ -23,27 +23,6 @@ def is_sort_attributes() -> bool:
     return get_config_property("style", "sort")
 
 
-def get_config_property(*args):
-    current_element = _config
-
-    for arg in args:
-        if not isinstance(current_element, dict):
-            raise TypeError("Trying to access a non-dictionary configuration element by key: '{}'.\n"
-                            "Element: {}".format(arg, current_element))
-        if arg not in current_element:
-            raise ValueError("Could not find/access attribute '{}' in configuration.\n"
-                             "Current element: '{}'".format(arg, current_element))
-
-        current_element = current_element[arg]
-
-    return current_element
-
-
-def set_config_or_default(config=None):
-    global _config
-    _config = config if config is not None else _default_config
-
-
 def get_attribute_names(hidden_only: bool = False) -> [str]:
     """
     Returns the names of all attributes. If 'only_hide' is set to true, only the attribute names for which the hide
@@ -67,3 +46,24 @@ def get_attribute_names(hidden_only: bool = False) -> [str]:
         else:
             names.append(attribute)
     return names
+
+
+def get_config_property(*args):
+    current_element = _config
+
+    for arg in args:
+        if not isinstance(current_element, dict):
+            raise TypeError("Trying to access a non-dictionary configuration element by key: '{}'.\n"
+                            "Element: {}".format(arg, current_element))
+        if arg not in current_element:
+            raise ValueError("Could not find/access attribute '{}' in configuration.\n"
+                             "Current element: '{}'".format(arg, current_element))
+
+        current_element = current_element[arg]
+
+    return current_element
+
+
+def set_config_or_default(config=None):
+    global _config
+    _config = config if config is not None else _default_config
