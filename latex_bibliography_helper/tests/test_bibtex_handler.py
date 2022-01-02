@@ -2,11 +2,11 @@ import unittest
 
 try:
     # When executed within PyCharm
-    import latex_bibliography_helper.bibtex_handler as bibtex_handler
+    import latex_bibliography_helper.handler.bibtex_handler as bibtex_handler
 except ImportError:
     # When executed in the root directory as:
     # pyton -m unittest tests.test_latex_handler
-    import bibtex_handler
+    import handler.bibtex_handler
 
 
 class TestCreateAttributeOrder(unittest.TestCase):

@@ -2,7 +2,6 @@ import re
 from typing import Union
 
 
-
 def extract_booktitle_shortname(booktitle: str) -> Union[str, None]:
     """
     Tries to extract the shortname of the booktitle of a publication. Curly brackets around the title are ignored and
