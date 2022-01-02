@@ -72,3 +72,54 @@ class TestCreateAttributeOrder(unittest.TestCase):
         result = bibtex_handler.create_attributes_order(current_attributes, plain_attributes_order, "_")
         self._check(expected, result)
 
+
+class TestHideAttributes(unittest.TestCase):
+
+    def _check(self, exptected, result):
+        self.assertDictEqual(exptected, result)
+
+    def test_hide_simple(self):
+        bib_entry = {"a": 42,
+                     "b": 25}
+        attributes_to_hide = ["a"]
+        expected = {"_a": 42,
+                    "b": 25}
+        bibtex_handler.hide_attributes(bib_entry, attributes_to_hide, "_")
+        self._check(expected, bib_entry)
+
+    def test_hide_nothing(self):
+        bib_entry = {"a": 42,
+                     "b": 25}
+        attributes_to_hide = []
+        expected = {"a": 42,
+                    "b": 25}
+        bibtex_handler.hide_attributes(bib_entry, attributes_to_hide, "_")
+        self._check(expected, bib_entry)
+
+    def test_hide_no_match(self):
+        bib_entry = {"a": 42,
+                     "b": 25}
+        attributes_to_hide = ["x", "y", "z"]
+        expected = {"a": 42,
+                    "b": 25}
+        bibtex_handler.hide_attributes(bib_entry, attributes_to_hide, "_")
+        self._check(expected, bib_entry)
+
+    def test_hide_complex(self):
+        bib_entry = {"a": 0,
+                     "b": 1,
+                     "_a": 2,
+                     "__a": 3,
+                     "___a": 4,
+                     "_c": 5,
+                     "_b": 6}
+        attributes_to_hide = ["a", "b", "c"]
+        expected = {"____a": 0,
+                    "__b": 1,
+                    "_a": 2,
+                    "__a": 3,
+                    "___a": 4,
+                    "_c": 5,
+                    "_b": 6}
+        bibtex_handler.hide_attributes(bib_entry, attributes_to_hide, "_")
+        self._check(expected, bib_entry)
