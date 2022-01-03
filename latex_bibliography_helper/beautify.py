@@ -21,8 +21,6 @@ def style(bib_database, curlify, pretty):
             if config.is_rewrite_booktitle():
                 util.rewrite_booktitle(bib_entry)
 
-        util.hide_attributes(bib_entry)
-
         # Collect all attributes
         all_attributes.update(list(bib_entry.keys()))
 
