@@ -52,7 +52,7 @@ The `settings` section should be fixed because the functionality is specially ad
 The `style` section can be customized:
 
 #### `rewriteBooktitle`
-Allows to rewrite the booktitle of a BibTeX entry. The shortname of the booktitle is extracted and replaced with a new name, specified in `nameWithPlaceholder`. The python string method `.format(...)` is used to insert the extracted shortname into the `nameWithPlaceholder` specified string, so `nameWithPlaceholder` must contain the placeholder `{}`. The original booktitle is *not* deleted and will be created as hidden attribute (see [hidePrefix](####hidePrefix)), the newly created attribute will be used as the new booktitle. `rewrite` controls if rewriting should be performed. 
+Allows to rewrite the booktitle of a BibTeX entry. The shortname of the booktitle is extracted and replaced with a new name, specified in `nameWithPlaceholder`. The python string method `.format(...)` is used to insert the extracted shortname into the `nameWithPlaceholder` specified string, so `nameWithPlaceholder` must contain the placeholder `{}`. The original booktitle is *not* deleted and will be created as hidden attribute (see [hidePrefix](#hideprefix)), the newly created attribute will be used as the new booktitle. `rewrite` controls if rewriting should be performed. 
 
 Example:
 ```
@@ -75,9 +75,62 @@ After rewriting:
 }
 ```
 
+Rewriting the booktitle helps in getting a uniform layout of all BibTeX entries. Otherwise, there may be different text of booktitles, e.g.:
+```
+1. Proceedings of the Sixteenth European Conference on Computer Systems, EuroSys 2017, nline Event, United Kingdom, April 26-28, 2021
+2. EuroSys '21: Sixteenth European Conference on Computer Systems, Online Event, United Kingdom, April 26-28, 2021
+3. 2021 Proceedings of the Sixteenth European Conference on Computer Systems(EuroSys)
+```
+
 #### `hidePrefix`
-The prefix to when use when an attribute should be "hidden". Hiding a attribut means, the attribute name is prefixed with the string specified in `hidePrefix`. E.g. when `_` is used as hide prefix, LaTeX will ignores all BibTeX attributes having this prefix, resulting in "hidden" attributes (from LaTeX's point of view). Alternatively, unused attributes can also be deleted, but then there is no possibility to view deleted attributes afterwards (apart from searching again for the BibTeX entry). Therefore, using a prefix to hide attributes is the most flexible option.
-- ``
+The prefix to use when an attribute should be "hidden". Hiding a attribute means, the attribute name is prefixed with the string specified in `hidePrefix`. E.g. when `_` is used as hide prefix, LaTeX ignores all BibTeX attributes having this prefix, resulting in "hidden" attributes (from LaTeX's point of view). Alternatively, unused attributes can also be deleted, but then there is no possibility to view deleted attributes afterwards (apart from searching again for the BibTeX entry). Therefore, using a prefix to hide attributes is the most flexible option.
+
+Example:
+```
+"title" is used by LaTeX:
+@article{Test,
+  title     = {Hello World}
+}
+
+"title" is ignored by LaTeX.
+@article{Test,
+  _title     = {Hello World}
+}
+```
+
+#### `sort`
+This setting is used in conjunction with `attributes`. If set to true, the attributes of the resulting BibTeX entry are ordered based on the order of `attributes` specified in the configuration file. All attributes that are not specified in the configuration but exist in the BibTeX entry are appended at the *end* of the ordered attributes. When sorting, attention is paid to hidden attributes, i.e., all attributes (hidden or not) are sorted as a group (but only attributes having a multiple of `hidePrefix` are considered).
+
+Example:
+```
+Configuration:
+"hidePrefix": "_"
+"sort": true
+"attributes": ["author", "title"]
+
+BibTeX entry:
+@article{Test,
+  title     = {Hello World},
+  editor    = {Erika Mustermann},
+  _title    = {hello world},
+  author    = {Max Mustermann},
+  -author   = {Franz Mustermann},
+  __title   = {hElLo WoRlD}
+}
+
+After sorting:
+@article{Test,
+  author    = {Max Mustermann},
+  title     = {Hello World},
+  _title    = {hello world},
+  __title   = {hElLo WoRlD},
+  -author   = {Franz Mustermann},
+  editor    = {Erika Mustermann}
+}
+```
+All `title` attributes (`title`, `_title`, `__title`) are considered as a group, whereas `-author` is not considered as a part of the `author` attribute as only a multiple of `hidePrefix` is allowed as prefix (and `-` is not the `hidePrefix`).  
+
+Sorting has no benefit for the final output produced by LaTeX, nevertheless it uniforms all BibTeX entries, so that the user can find his way around faster, which reduces the risk of errors introduced by the user (when, e.g., an attribute has to be adapted/extended manually).
 
 ### --curly
 Set another pair of curly brackets around the title to preserve capitalization. Example:
