@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import pkgutil
 
 import jsonschema
@@ -9,6 +10,8 @@ import util
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
 
 def prepare(config_file):
@@ -37,15 +40,15 @@ if __name__ == "__main__":
                         dest="config_file",
                         type=FileType('r', encoding='UTF-8'),
                         help="The configuration file to be used.",
-                        default="config.json")
+                        default=os.path.join(SCRIPT_DIRECTORY, "config.json"))
     parser.add_argument("--curly",
                         dest="curlify",
                         action="store_true",
                         help="Set another pair of curly brackets around the title")
     parser.add_argument("--pretty",
-                             dest="pretty",
-                             help="Apply the style (order, hide) of attributes specified in the configuration file.",
-                             action="store_true")
+                        dest="pretty",
+                        help="Apply the style (order, hide) of attributes specified in the configuration file.",
+                        action="store_true")
     parser.add_argument("-ctc", "--copy-to-clipboard",
                         dest="copy_to_clipboard",
                         action="store_true",
