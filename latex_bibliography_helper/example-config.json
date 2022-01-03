@@ -39,6 +39,7 @@
         "hide": true
       },
       "isbn",
+      "lccn",
       {
         "name": "url",
         "hide": true
