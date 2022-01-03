@@ -171,6 +171,9 @@ After processing:
 }
 ```
 
+### `--pretty`
+Apply all style specific settings of the configuration file (`--config`).
+
 ### --curly
 Set another pair of curly brackets around the title to preserve capitalization. Example:
 ```
@@ -196,6 +199,8 @@ This will produce the following output in LaTeX:
 
 When this option is enabled, another pair of curly brackets will be added to the title to preserve capitalization in LaTeX.
 
+#### `-ctc`, `--copy-to-clipboard`
+Copies the final result (the BibTeX entry) into the clipboard (nevertheless, the final result is displayed on the console).
 
 ### Find
 The module `find` searches for publications by using the [dblp](https://dblp.org) REST-API. Once the publication is found, the BibTeX entry is downloaded and shown. If more than one publication is found, all results will be displayed and the user is able to choose one.
