@@ -369,3 +369,4 @@ python3 latex_bib_helper.py -ctc --pretty --curly Beautify -cfc
 - DBLP (and all other scientific databases) store the wrong paper title, i.e., capitalization of the title does not
   match exactly the paper title. We may use something like [capitalizemytitle.com](https://capitalizemytitle.com/#) to
   propose the user an alternative title.
+- Change `rewrite_booktitle` of `util.py` such that it searches for the booktitle in all booktitle attributes (including hidden). Use case: The template of the booktitle is changed afterwards and a new one should be applied. 
