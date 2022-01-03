@@ -87,16 +87,17 @@ def ask_user_for_publication(publications):
     while True:
         index = input("Enter number of publication to use: ")
         try:
+            if index == -1 or index == "q" or index == "Q":
+                return None
+
             index = int(index)
             if index < -1 or index >= len(publications):
                 # Trigger help text and continue processing
                 raise ValueError()
-            if index == -1:
-                return None
             break  # Valid input!
         except ValueError:
             print("{} is not a number or is out of range! Range is {} - {}.\n"
-                  "Print -1 to abort.".format(index, 0, len(publications) - 1))
+                  "Print -1, q or Q to abort.".format(index, 0, len(publications) - 1))
             continue
     return publications[index]
 
