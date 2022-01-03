@@ -41,7 +41,7 @@ if __name__ == "__main__":
     parser.add_argument("--curly",
                         dest="curlify",
                         action="store_true",
-                        help="Set another pair of curly brackets around the tile")
+                        help="Set another pair of curly brackets around the title")
     parser.add_argument("--pretty",
                              dest="pretty",
                              help="Apply the style (order, hide) of attributes specified in the configuration file.",
