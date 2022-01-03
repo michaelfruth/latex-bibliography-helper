@@ -132,6 +132,45 @@ All `title` attributes (`title`, `_title`, `__title`) are considered as a group,
 
 Sorting has no benefit for the final output produced by LaTeX, nevertheless it uniforms all BibTeX entries, so that the user can find his way around faster, which reduces the risk of errors introduced by the user (when, e.g., an attribute has to be adapted/extended manually).
 
+
+#### `attributes`
+Contains the attributes in the exact order in which they should be sorted (when `sort` is enabled). The attribute can either specified as simple string or as object (mixing styles is allowed):
+
+```json
+String:
+... "attributes": ["author"] ...
+
+Object:
+... "attributes": [ {"name": "author", "hide": true} ] ...
+```
+
+The object declaration enables the setting whether the respective attribute should be hidden (see [hidePrefix](#hideprefix)). Existing hidden attributes are *not* overwritten, `hidePrefix` is concatenated as long until a non-existing hidden attribute name is found. 
+
+Example:
+```
+Configuration:
+"hidePrefix": "_"
+ "attributes": [ "author", {"name": "publisher", "hide": true}, {"name": "booktitle", "hide": true} ]
+
+BibTeX entry:
+@article{Test,
+  author        = {Max Mustermann},
+  publisher     = {Mustermann AG},
+  booktitle     = {Book 1},
+  _booktitle    = {Book 2},
+  __booktitle   = {Book 3}
+}
+
+After processing:
+@article{Test,
+  author       = {Max Mustermann},
+  _publisher   = {Mustermann AG},
+  ___booktitle = {Book 1},
+  _booktitle   = {Book 2},
+  __booktitle  = {Book 3}
+}
+```
+
 ### --curly
 Set another pair of curly brackets around the title to preserve capitalization. Example:
 ```
