@@ -14,25 +14,39 @@
       "nameWithPlaceholder": "Proc.\\ {}"
     },
     "attributes": [
+      "author",
       {
-        "name": "author",
-        "hide": false
+        "name": "editor",
+        "hide": true
       },
-      "editor",
       "title",
       "booktitle",
       "journal",
       "number",
       "volume",
-      "series",
+      {
+        "name": "series",
+        "hide": true
+      },
       "pages",
-      "publisher",
+      {
+        "name": "publisher",
+        "hide": true
+      },
       "year",
-      "month",
+      {
+        "name": "month",
+        "hide": true
+      },
       "isbn",
-      "lccn",
-      "url",
-      "doi",
+      {
+        "name": "url",
+        "hide": true
+      },
+      {
+        "name": "doi",
+        "hide": true
+      },
       "lastaccessed",
       "timestamp",
       "biburl",
