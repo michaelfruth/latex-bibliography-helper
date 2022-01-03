@@ -16,6 +16,69 @@ The entrypoint of this tool is the python module `latex_bib_helper.py`, from whi
 
 See `latex_bib_helper.py --help` for a full list of all arguments. Below are the most important arguments explained in more detail.
 
+### `--config`
+The tool is controlled by a configuration file. This configuration file contains (1) settings of the tool and (2) the formatting rules of the BibTeX entries. See [example-config.json](latex_bibliography_helper/example-config.json) for an example configuration file.
+
+Example configuration file:
+```json
+{
+  "settings": {
+    "search": {
+      "publicationUrl": "http://dblp.org/search/publ/api?q={}&format=json",
+      "authorUrl": "http://dblp.org/search/author/api?q={}&format=json",
+      "venueUrl": "http://dblp.org/search/venue/api?q={}&format=json"
+    }
+  },
+  "style": {
+    "rewriteBooktitle": {
+      "rewrite": true,
+      "nameWithPlaceholder": "Proc.\\ {}"
+    },
+    "hidePrefix": "_",
+    "sort": true,
+    "attributes": [
+      "author",
+      {
+        "name": "editor",
+        "hide": true
+      }
+    ]
+  }
+}
+```
+
+The `settings` section should be fixed because the functionality is specially adapadted for DBLP. 
+
+The `style` section can be customized:
+
+#### `rewriteBooktitle`
+Allows to rewrite the booktitle of a BibTeX entry. The shortname of the booktitle is extracted and replaced with a new name, specified in `nameWithPlaceholder`. The python string method `.format(...)` is used to insert the extracted shortname into the `nameWithPlaceholder` specified string, so `nameWithPlaceholder` must contain the placeholder `{}`. The original booktitle is *not* deleted and will be created as hidden attribute (see [hidePrefix](####hidePrefix)), the newly created attribute will be used as the new booktitle. `rewrite` controls if rewriting should be performed. 
+
+Example:
+```
+"nameWithPlaceholder": "Proc.\\ {}" 
+"hidePrefix": "_"
+
+BibTeX entry:
+@article{Test,
+  booktitle  = {Performance Evaluation and Benchmarking for the Era of Cloud(s) -
+               11th {TPC} Technology Conference, {TPCTC} 2019, Los Angeles, CA, USA,
+               August 26, 2019, Revised Selected Papers}
+}
+
+After rewriting:
+@article{Test,
+  booktitle  = {Proc.\ TPCTC}
+  _booktitle  = {Performance Evaluation and Benchmarking for the Era of Cloud(s) -
+               11th {TPC} Technology Conference, {TPCTC} 2019, Los Angeles, CA, USA,
+               August 26, 2019, Revised Selected Papers}
+}
+```
+
+#### `hidePrefix`
+The prefix to when use when an attribute should be "hidden". Hiding a attribut means, the attribute name is prefixed with the string specified in `hidePrefix`. E.g. when `_` is used as hide prefix, LaTeX will ignores all BibTeX attributes having this prefix, resulting in "hidden" attributes (from LaTeX's point of view). Alternatively, unused attributes can also be deleted, but then there is no possibility to view deleted attributes afterwards (apart from searching again for the BibTeX entry). Therefore, using a prefix to hide attributes is the most flexible option.
+- ``
+
 ### --curly
 Set another pair of curly brackets around the title to preserve capitalization. Example:
 ```
