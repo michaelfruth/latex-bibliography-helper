@@ -70,7 +70,7 @@ See `latex_bib_helper.py --help` for a full list of all arguments. Below are the
 
 The tool is controlled by a configuration file. This configuration file contains (1) settings of the tool and (2) the
 formatting rules of the BibTeX entries. See [example-config.json](latex_bibliography_helper/example-config.json) for an
-example configuration file.
+example configuration file. The default value is `config.json`, i.e., when `--config` is not set, it is assumed that the following file exists: `latex_bibliography_helper/config.json`.
 
 Example configuration file:
 
