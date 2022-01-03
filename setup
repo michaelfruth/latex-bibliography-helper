@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Download all dependencies
+pyenv sync
+
+# cp -n (<- do not overwrite existing file)
+cp -n latex_bibliography_helper/example-config.json latex_bibliography_helper/config.json

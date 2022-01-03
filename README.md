@@ -17,6 +17,8 @@ This tool uses the REST-API of [dblp](https://dblp.org) to search for references
     - Hiding of attributes (hiding in the sense of LaTex will ignore these fields during processing)
 
 ## Quick Start
+Step 2 and 4 can be done by using the script [setup](setup).
+
 1. Download the project and change into this directory:
 ```shell
 git clone https://github.com/michaelfruth/latex-bibliography-helper.git
