@@ -203,9 +203,39 @@ When this option is enabled, another pair of curly brackets will be added to the
 Copies the final result (the BibTeX entry) into the clipboard (nevertheless, the final result is displayed on the console).
 
 ### Find
-The module `find` searches for publications by using the [dblp](https://dblp.org) REST-API. Once the publication is found, the BibTeX entry is downloaded and shown. If more than one publication is found, all results will be displayed and the user is able to choose one.
+The module `find` searches for publications by using the [dblp](https://dblp.org) REST-API. Once the publication is found, the BibTeX entry is downloaded and shown. If more than one publication is found, all results will be displayed and the user is able to choose one. 
+
+`find` accepts only one argument, the title of publication to search (`latex_bib_helper.py Find --help` shows all arguments).
 
 #### Usage
+Basic usage to search for a publication. The unmodified, original BibTeX entry is printed to console:
+```shell
+python3 latex_bib_helper.py Find <TITLE>
+```
+
+Extended usage to search for a publication. The result is copied into the clipboard (`-ctc`), the style of the configuration file is applied (`--pretty`) and the title gets another pair of curly brackets (`--curly`): 
+```shell
+python3 latex_bib_helper.py -ctc --pretty --curly Find <TITLE>
+```
+
+Example:
+```shell
+python3 latex_bib_helper.py -ctc --pretty --curly Find Tell-Tale Tail Latencies: Pitfalls and Perils in Database Benchmarking
+```
+
+---
+**NOTE**
+
+The title can be given in plain text (no quotation marks required). Quotation marks are interpreted by the shell, i.e. if the title contains a quotation mark, the entire title may need to be quoted. Example:
+```
+Wrong (quotation mark is interpreted by the shell):
+python3 latex_bib_helper.py Find I'm a Hello World Application
+
+Correct:
+python3 latex_bib_helper.py Find "I'm a Hello World Application"
+```
+---
+
 
 ### Beautify
 
