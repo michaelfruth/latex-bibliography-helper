@@ -16,6 +16,48 @@ This tool uses the REST-API of [dblp](https://dblp.org) to search for references
     - Automatic rewriting of the booktitle attribute
     - Hiding of attributes (hiding in the sense of LaTex will ignore these fields during processing)
 
+## Quick Start
+1. Download the project and change into this directory:
+```shell
+git clone https://github.com/michaelfruth/latex-bibliography-helper.git
+cd latex-bibliography-helper
+```
+
+2. Install dependencies by using pipenv (you may have to install pipenv first `pip install pipenv`)
+```shell
+pipenv sync
+```
+
+3. Enter pyenv shell 
+```shell
+pyenv shell
+```
+
+4. Set configuration file (see [--config](#--config) for more details).
+```shell
+cd latex_bibliography_helper 
+# pwd (should print: ...../latex-bibliography-helper/latex_bibliography_helper)
+
+cp example-config.json config.json
+```
+
+5. Search for a publication
+```shell
+python3 latex_bib_helper.py -ctc --pretty --curly Find <TITLE>
+
+# Example:
+python3 latex_bib_helper.py -ctc --pretty --curly Find Tell-Tale Tail Latencies: Pitfalls and Perils in Database Benchmarking
+```
+
+6. Format existing BibTeX entries
+```shell
+# Use BibTeX file as input
+python3 latex_bib_helper.py -ctc --pretty --curly Beautify -f <FILE>
+
+# Use clipboard content as input
+python3 latex_bib_helper.py -ctc --pretty --curly Beautify -cfc
+```
+
 ## Usage
 
 The entrypoint of this tool is the python module `latex_bib_helper.py`, from which the `find` and `beautify` module can
