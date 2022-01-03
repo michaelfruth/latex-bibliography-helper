@@ -80,3 +80,4 @@ def apply_bibtex_writer_style(writer: BibTexWriter) -> None:
     writer.indent = " " * 4
     writer.order_entries_by = None
     writer.align_values = True
+    writer.align_multiline_values = False
