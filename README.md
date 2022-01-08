@@ -16,6 +16,40 @@
     - Automatic rewriting of the booktitle attribute
     - Hiding of attributes (hiding in the sense of LaTex will ignore these fields during processing)
 
+Beautify example:
+```
+Original BibTeX entry:
+@inproceedings{DBLP:conf/icde/FruthDS21,
+  author    = {Michael Fruth and
+               Kai Dauberschmidt and
+               Stefanie Scherzinger},
+  url       = {https://doi.org/10.1109/ICDE51399.2021.00306},
+  title     = {Josch: Managing Schemas for NoSQL Document Stores},
+  booktitle = {37th {IEEE} International Conference on Data Engineering, {ICDE} 2021,
+               Chania, Greece, April 19-22, 2021},
+  publisher = {{IEEE}},
+  year      = {2021},
+  pages     = {2693--2696},
+  doi       = {10.1109/ICDE51399.2021.00306}
+}
+
+Beautified BibTeX entry (attributes are ordered):
+@inproceedings{DBLP:conf/icde/FruthDS21,
+    author     = {Michael Fruth and
+                  Kai Dauberschmidt and
+                  Stefanie Scherzinger},
+    title      = {{Josch: Managing Schemas for NoSQL Document Stores}},     # <- Add another pair of curly brackets to keep upper/lower case.
+    booktitle  = {Proc.\ ICDE},             # <- Rewrite booktitle     
+    _booktitle = {37th {IEEE} International Conference on Data Engineering, {ICDE} 2021,
+                  Chania, Greece, April 19-22, 2021},
+    pages      = {2693--2696},
+    _publisher = {{IEEE}},                  # <- hide attributes by inserting a prefix
+    year       = {2021},
+    _url       = {https://doi.org/10.1109/ICDE51399.2021.00306},        # <- Order attributes
+    _doi       = {10.1109/ICDE51399.2021.00306}
+}
+```
+
 ## Configuration
 `bibhelper` *requires* a configuration file. If no configuration file can be found or loaded properly, the tool aborts. The following locations will be used to load the configuration file:
 1. Command line argument `--config`
