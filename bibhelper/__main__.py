@@ -6,7 +6,9 @@ from pathlib import Path
 
 import jsonschema
 
+from bibhelper.beautify import beautify
 from bibhelper.config import set_config
+from bibhelper.find import find
 from bibhelper.util import read_from_clipboard
 
 logger = logging.getLogger(__name__)
@@ -137,20 +139,16 @@ def main():
     load_configuration(args.config_file)
 
     if args.command == "Find":
-        import find
-
         title = " ".join(args.title)
-        find.find(title, args.curlify, args.copy_to_clipboard, args.pretty)
+        find(title, args.curlify, args.copy_to_clipboard, args.pretty)
     elif args.command == "Beautify":
-        import beautify
-
         if args.input_clipboard:
             beautify_content = read_from_clipboard()
         else:
             input_file = args.input_file
             beautify_content = input_file.read()
             input_file.close()
-        beautify.beautify(beautify_content, args.curlify, args.copy_to_clipboard, args.pretty)
+        beautify(beautify_content, args.curlify, args.copy_to_clipboard, args.pretty)
     else:
         raise ValueError("Unknown ArgumentParser option: {}".format(args.command))
 
