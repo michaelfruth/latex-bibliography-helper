@@ -2,8 +2,10 @@ import json
 import logging
 import os
 import pkgutil
+from argparse import ArgumentParser, FileType
 
 import jsonschema
+
 
 import config
 import util
@@ -31,9 +33,7 @@ def prepare(config_file):
     config_file.close()
 
 
-if __name__ == "__main__":
-    from argparse import ArgumentParser, FileType
-
+def main():
     parser = ArgumentParser(
         description="This is a tool to help in setting up, cleaning and refactoring the LaTex bibliography.")
     parser.add_argument("--config",
@@ -102,3 +102,7 @@ if __name__ == "__main__":
         beautify.beautify(file_content, args.curlify, args.copy_to_clipboard, args.pretty)
     else:
         raise ValueError("Unknown ArgumentParser option: {}".format(args.command))
+
+
+if __name__ == "__main__":
+    main()
