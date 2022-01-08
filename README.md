@@ -1,11 +1,11 @@
 # LaTeX Bibliography Helper
 
-This tool helps in handling bibliography for BibTeX (a bibliography manager for LaTeX). It consists of two modules:
+`bibhelper` helps in handling bibliography for BibTeX (a bibliography manager for LaTeX). It consists of two modules:
 
 - `find`: Lookup references and get their BibTeX entry.
 - `beautify`: Beautify existing references.
 
-This tool uses the REST-API of [dblp](https://dblp.org) to search for references and to get the respective BibTeX entry. Handling BibTeX within in Python is done by using the python library [BibtexParser](https://bibtexparser.readthedocs.io/en/master/). Due to a not so nice formatting in the original library when printing a multi-line string, a custom/forked version is used instead (https://github.com/michaelfruth/python-bibtexparser). Nevertheless, this tool works also perfectly with the original version, the modification just affects the formatting.
+`bibhelper` uses the REST-API of [dblp.org](https://dblp.org) to search for references and to get the respective BibTeX entry. Handling BibTeX within in Python is done by using the python library [BibtexParser](https://bibtexparser.readthedocs.io/en/master/). Due to a not so nice formatting in the original library when printing a multi-line string, a custom/forked version is used instead (https://github.com/michaelfruth/python-bibtexparser). Nevertheless, this tool works also perfectly with the original version, the modification just affects the formatting.
 
 ## Features
 
@@ -17,65 +17,32 @@ This tool uses the REST-API of [dblp](https://dblp.org) to search for references
     - Hiding of attributes (hiding in the sense of LaTex will ignore these fields during processing)
 
 ## Configuration
-The tool requires a configuration file. If no file could be found or loaded properly, the tool aborts. The following locations will be used to load the configuration file:
+`bibhelper` *requires* a configuration file. If no configuration file can be found or loaded properly, the tool aborts. The following locations will be used to load the configuration file:
 1. Command line argument `--config`
 2. Environment variable: `LATEX_BIBTEX_HELPER_CONFIG`
 3. Home directory: `~/.latex_bibtex_helper_config.json`
 4. Default file (shipped with the package): [bibhelper/resources/latex_bibtex_helper_config.json](bibhelper/resources/latex_bibtex_helper_config.json)
 
-See [`--config`](#--config) for a full explanation of the configuration file.
+See Section [`--config`](#--config) for a detailed explanation of the configuration file.
 
+## Getting Started
+`bibhelper` can be installed via pip:
 
-## Quick Start
-### TODO: REWORK
-1. Download the project and change into this directory:
 ```shell
-git clone https://github.com/michaelfruth/latex-bibliography-helper.git
-cd latex-bibliography-helper
+# Install most current version
+pip install git+https://github.com/michaelfruth/latex-bibliography-helper.git#egg=bibhelper
+
+# Install a specific version (version 1.0.0 in this example)
+pip install git+https://github.com/michaelfruth/latex-bibliography-helper.git@1.0.0#egg=bibhelper
 ```
 
-2. Install dependencies by using pipenv (you may have to install pipenv first `pip install pipenv`)
+Once installed, `bibhelper` can be used (make sure that pip installed modules can be found in `$PATH`):
 ```shell
-pipenv sync
-```
-
-3. Enter pyenv shell 
-```shell
-pyenv shell
-```
-
-4. Set configuration file (see [--config](#--config) for more details).
-```shell
-cd latex_bibliography_helper 
-# pwd (should print: ...../latex-bibliography-helper/latex_bibliography_helper)
-
-cp example-config.json config.json
-```
-
-5. Search for a publication
-```shell
-python3 latex_bib_helper.py -ctc --pretty --curly Find <TITLE>
-
-# Example:
-python3 latex_bib_helper.py -ctc --pretty --curly Find Tell-Tale Tail Latencies: Pitfalls and Perils in Database Benchmarking
-```
-
-6. Format existing BibTeX entries
-```shell
-# Use BibTeX file as input
-python3 latex_bib_helper.py -ctc --pretty --curly Beautify -f <FILE>
-
-# Use clipboard content as input
-python3 latex_bib_helper.py -ctc --pretty --curly Beautify -cfc
+bibhelper --help
 ```
 
 ## Usage
-
-The entrypoint of this tool is the python module `latex_bib_helper.py`, from which the `find` and `beautify` module can
-be executed. `latex_bib_helper.py` supports several options, which will influence the behaviour to the respective
-module.
-
-See `latex_bib_helper.py --help` for a full list of all arguments. Below are the most important arguments explained in more detail.
+See `bibhelper --help` for a full list of all arguments. Below are the most important arguments explained in more detail.
 
 ### `--config`
 
@@ -309,7 +276,7 @@ The module `find` searches for publications by using the [dblp](https://dblp.org
 found, the BibTeX entry is downloaded and shown. If more than one publication is found, all results will be displayed
 and the user is able to choose one.
 
-`find` accepts only one argument, the title of publication to search (`latex_bib_helper.py Find --help` shows all
+`find` accepts only one argument, the title of publication to search (`bibhelper Find --help` shows all
 arguments).
 
 #### Usage
@@ -317,20 +284,20 @@ arguments).
 Basic usage to search for a publication. The unmodified, original BibTeX entry is printed to console:
 
 ```shell
-python3 latex_bib_helper.py Find <TITLE>
+bibhelper Find <TITLE>
 ```
 
 Extended usage to search for a publication. The result is copied into the clipboard (`-ctc`), the style of the
 configuration file is applied (`--pretty`) and the title gets another pair of curly brackets (`--curly`):
 
 ```shell
-python3 latex_bib_helper.py -ctc --pretty --curly Find <TITLE>
+bibhelper -ctc --pretty --curly Find <TITLE>
 ```
 
 Example:
 
 ```shell
-python3 latex_bib_helper.py -ctc --pretty --curly Find Tell-Tale Tail Latencies: Pitfalls and Perils in Database Benchmarking
+bibhelper -ctc --pretty --curly Find Tell-Tale Tail Latencies: Pitfalls and Perils in Database Benchmarking
 ```
 
 ---
@@ -341,10 +308,10 @@ if the title contains a quotation mark, the entire title may need to be quoted. 
 
 ```
 Wrong (quotation mark is interpreted by the shell):
-python3 latex_bib_helper.py Find I'm a Hello World Application
+bibhelper Find I'm a Hello World Application
 
 Correct:
-python3 latex_bib_helper.py Find "I'm a Hello World Application"
+bibhelper Find "I'm a Hello World Application"
 ```
 
 ---
@@ -352,7 +319,7 @@ python3 latex_bib_helper.py Find "I'm a Hello World Application"
 ### Beautify
 The module `beautify` beautifies existing BibTeX entries. The source of the BibTeX entries can either be a BibTeX-file or the clipboard containing the content. When no argument is specified for the main module (either `--pretty` or `--curly`), the content will be parsed by BibtexParser and printed afterwards. BibtexParser may change the format of the content but should not modify the content (unless there are no BibTeX errors).
 
-The following arguments are available (see `latex_bib_helper.py Beautify --help` for a full list of all arguments):
+The following arguments are available (see `bibhelper Beautify --help` for a full list of all arguments):
 
 #### `-f`, `--file`
 The BibTeX file to use as input. The file is *not* modified, just the content is read.
@@ -364,14 +331,27 @@ Reads the content from the clipboard and uses this as input. A BibTeX-file may b
 Basic usage to beautify a BibTex file (content should not be modified unless there are no BibTeX errors):
 
 ```shell
-python3 latex_bib_helper.py Beautify -f <PATH-TO-FILE>
+bibhelper Beautify -f <PATH-TO-FILE>
 ```
 
 Extended usage to beautify BibTeX content from the clipboard. The result is copied into the clipboard (`-ctc`), the style of the configuration file is applied (`--pretty`) and the title gets another pair of curly brackets (`--curly`):
 
 ```shell
-python3 latex_bib_helper.py -ctc --pretty --curly Beautify -cfc
+bibhelper -ctc --pretty --curly Beautify -cfc
 ```
+
+## Development
+Development is done by using `pipenv` and `pyenv`.
+
+1. `pipenv sync`
+   - Creates a virtual environment and installs all required packages.
+2. `pyenv install`
+   - Install python version specified in [.python-version](.python-version)
+3. `pipenv shell`
+   - Spawns a shell within the virtual environment.
+   - [.env](.env) is loaded automatically by pipenv. This file is needed to fix the `PYTHONPATH`, otherwise `import bibhelper...` throws an `ImportError`.   
+4. `python bibhelper`
+   - Execute `bibhelper` manually ([__main__.py](bibhelper/__main__.py) is executed automatically.).
 
 ## TODOs
 
