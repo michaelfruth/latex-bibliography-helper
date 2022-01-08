@@ -70,7 +70,7 @@ pip install git+https://github.com/michaelfruth/latex-bibliography-helper.git#eg
 pip install git+https://github.com/michaelfruth/latex-bibliography-helper.git@1.0.0#egg=bibhelper
 ```
 
-Once installed, `bibhelper` can be used (make sure that pip installed modules can be found in `$PATH`):
+Once installed, `bibhelper` can be used (make sure that pip installed packages can be found in `$PATH`):
 ```shell
 bibhelper --help
 ```
