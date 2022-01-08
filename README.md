@@ -340,11 +340,11 @@ bibhelper -ctc --pretty --curly Find Tell-Tale Tail Latencies: Pitfalls and Peri
 The title can be given in plain text (no quotation marks required). Quotation marks are interpreted by the shell, i.e.
 if the title contains a quotation mark, the entire title may need to be quoted. Example:
 
-```
-Wrong (quotation mark is interpreted by the shell):
+```shell
+# Wrong (quotation mark is interpreted by the shell):
 bibhelper Find I'm a Hello World Application
 
-Correct:
+# Correct:
 bibhelper Find "I'm a Hello World Application"
 ```
 
