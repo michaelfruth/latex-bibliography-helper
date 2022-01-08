@@ -49,7 +49,7 @@ def hide_attributes(bib_entry: dict):
     bibtex_handler.hide_attributes(bib_entry, attributes_to_hide, hide_prefix)
 
 
-def curlify_title(bib_entry: dict):
+def curlify_title(bib_entry: dict) -> None:
     key = "title"
     if key in bib_entry:
         bib_entry[key] = latex_handler.curlify(bib_entry[key])
