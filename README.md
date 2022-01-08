@@ -7,6 +7,16 @@
 
 `bibhelper` uses the REST-API of [dblp.org](https://dblp.org) to search for references and to get the respective BibTeX entry. Handling BibTeX within in Python is done by using the python library [BibtexParser](https://bibtexparser.readthedocs.io/en/master/). Due to a not so nice formatting in the original library when printing a multi-line string, a custom/forked version is used instead (https://github.com/michaelfruth/python-bibtexparser). Nevertheless, this tool works also perfectly with the original version, the modification just affects the formatting.
 
+**Table of Contents**:
+- [Features](#features)
+- [Configuration](#configuration)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+  - [Find](#find)
+  - [Beautify](#beautify)
+- [Development](#development)
+- [TODOs](#todos)
+
 ## Features
 
 - Find references and retrieve their BibTeX entry automatically.
