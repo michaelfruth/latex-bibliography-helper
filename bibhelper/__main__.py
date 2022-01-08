@@ -140,9 +140,6 @@ def main():
 
     args = parser.parse_args()
     logging.basicConfig(level=args.loglevel)
-    if args.print_version:
-        print(__version__)
-        exit(0)
 
     load_configuration(args.config_file)
 
