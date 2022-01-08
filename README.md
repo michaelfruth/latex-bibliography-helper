@@ -17,7 +17,7 @@ This tool uses the REST-API of [dblp](https://dblp.org) to search for references
     - Hiding of attributes (hiding in the sense of LaTex will ignore these fields during processing)
 
 ## Configuration
-`latex_bibtex_helper` requires a configuration file. If no file could be found or loaded properly, the tool aborts. The following locations will be used to load the configuration file:
+The tool requires a configuration file. If no file could be found or loaded properly, the tool aborts. The following locations will be used to load the configuration file:
 1. Command line argument `--config`
 2. Environment variable: `LATEX_BIBTEX_HELPER_CONFIG`
 3. Home directory: `~/.latex_bibtex_helper_config.json`
@@ -81,7 +81,7 @@ See `latex_bib_helper.py --help` for a full list of all arguments. Below are the
 
 The tool is controlled by a configuration file. This configuration file contains (1) settings of the tool and (2) the
 formatting rules of the BibTeX entries. See [bibhelper/resources/latex_bibtex_helper_config.json](bibhelper/resources/latex_bibtex_helper_config.json) for an
-example configuration file.
+example configuration file. The configuration file **must** be valid against this schema: [bibhelper/resources/config.schema.json](bibhelper/resources/config.schema.json).
 
 Example configuration file:
 
