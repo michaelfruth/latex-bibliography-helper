@@ -6,6 +6,7 @@ from pathlib import Path
 
 import jsonschema
 
+from bibhelper import __version__
 from bibhelper.beautify import beautify
 from bibhelper.config import set_config
 from bibhelper.find import find
@@ -112,6 +113,10 @@ def main():
                         const=logging.DEBUG,
                         default=logging.WARNING,
                         )
+    parser.add_argument('--version',
+                        action='version',
+                        version='%(prog)s {version}'.format(version=__version__),
+                        help="Print the version.")
 
     subparsers = parser.add_subparsers(dest='command',
                                        help="The functionality to use.",
@@ -135,6 +140,9 @@ def main():
 
     args = parser.parse_args()
     logging.basicConfig(level=args.loglevel)
+    if args.print_version:
+        print(__version__)
+        exit(0)
 
     load_configuration(args.config_file)
 
