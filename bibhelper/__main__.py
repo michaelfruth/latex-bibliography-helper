@@ -6,9 +6,8 @@ from argparse import ArgumentParser, FileType
 
 import jsonschema
 
-
-import config
-import util
+from bibhelper.config import set_config_or_default
+from bibhelper.util import read_from_clipboard
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,11 +23,11 @@ def prepare(config_file):
     # Validate
     try:
         jsonschema.validate(json_config, json_schema)
-        config.set_config_or_default(json_config)
+        set_config_or_default(json_config)
     except jsonschema.exceptions.ValidationError as e:
         logger.warning("Failed validating the configuration file.\n{}\n"
                        "Using the default configuration.".format(e))
-        config.set_config_or_default()
+        set_config_or_default()
 
     config_file.close()
 
@@ -94,7 +93,7 @@ def main():
         import beautify
 
         if args.input_clipboard:
-            file_content = util.read_from_clipboard()
+            file_content = read_from_clipboard()
         else:
             input_file = args.input_file
             file_content = input_file.read()

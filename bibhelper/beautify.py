@@ -1,11 +1,10 @@
-from bibtexparser.bwriter import BibTexWriter
 import logging
-from handler import bibtex_handler
 
 import bibtexparser
-
-import util
 import config
+import util
+from bibhelper.handler.bibtex_handler import apply_bibtex_writer_style, create_attributes_order
+from bibtexparser.bwriter import BibTexWriter
 
 logger = logging.getLogger(__name__)
 
@@ -25,14 +24,14 @@ def style(bib_database, curlify, pretty):
         all_attributes.update(list(bib_entry.keys()))
 
     writer = BibTexWriter()
-    bibtex_handler.apply_bibtex_writer_style(writer)
+    apply_bibtex_writer_style(writer)
 
     attributes_order = writer.display_order
     if config.is_sort_attributes():
         # Order attributes
-        attributes_order = bibtex_handler.create_attributes_order(all_attributes,
-                                                                  config.get_attribute_names(),
-                                                                  config.get_hide_prefix())
+        attributes_order = create_attributes_order(all_attributes,
+                                                   config.get_attribute_names(),
+                                                   config.get_hide_prefix())
     writer.display_order = attributes_order
 
     bib = writer.write(bib_database)

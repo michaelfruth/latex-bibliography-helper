@@ -1,13 +1,14 @@
 import json
 import logging
 
-import bibtexparser
 import requests
-from bibtexparser.bwriter import BibTexWriter
 
-import config
-import util
-from handler import bibtex_handler
+import bibtexparser
+from bibhelper.config import is_rewrite_booktitle, is_sort_attributes, get_attribute_names, get_hide_prefix, \
+    get_config_property
+from bibhelper.handler.bibtex_handler import apply_bibtex_writer_style, create_attributes_order
+from bibhelper.util import curlify_title, hide_attributes, rewrite_booktitle
+from bibtexparser.bwriter import BibTexWriter
 
 logger = logging.getLogger(__name__)
 
@@ -121,21 +122,21 @@ def load_bibitem(publication, curlify, pretty):
     bib_entry = bib_database.entries[0]
 
     if curlify:
-        util.curlify_title(bib_entry)
+        curlify_title(bib_entry)
     if pretty:
-        util.hide_attributes(bib_entry)
-        if config.is_rewrite_booktitle():
-            util.rewrite_booktitle(bib_entry)
+        hide_attributes(bib_entry)
+        if is_rewrite_booktitle():
+            rewrite_booktitle(bib_entry)
 
     writer = BibTexWriter()
-    bibtex_handler.apply_bibtex_writer_style(writer)
+    apply_bibtex_writer_style(writer)
 
     attributes_order = writer.display_order
-    if config.is_sort_attributes():
+    if is_sort_attributes():
         # Order attributes
-        attributes_order = bibtex_handler.create_attributes_order(bib_entry.keys(),
-                                                                  config.get_attribute_names(),
-                                                                  config.get_hide_prefix())
+        attributes_order = create_attributes_order(bib_entry.keys(),
+                                                   get_attribute_names(),
+                                                   get_hide_prefix())
     writer.display_order = attributes_order
 
     bib = writer.write(bib_database)
@@ -143,7 +144,7 @@ def load_bibitem(publication, curlify, pretty):
 
 
 def find(title, curlify, copy_to_clipboard, pretty):
-    publications_url = config.get_config_property("settings", "search", "publicationUrl")
+    publications_url = get_config_property("settings", "search", "publicationUrl")
     publications_url = publications_url.format(title)  # Set title as query in  URL
 
     publications = load_publications(publications_url)
@@ -158,5 +159,5 @@ def find(title, curlify, copy_to_clipboard, pretty):
         item = load_bibitem(publication, curlify, pretty)
 
         if copy_to_clipboard:
-            util.copy_to_clipboard(item)
+            copy_to_clipboard(item)
         print(item)
