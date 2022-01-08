@@ -38,7 +38,7 @@ Beautified BibTeX entry (attributes are ordered):
     author     = {Michael Fruth and
                   Kai Dauberschmidt and
                   Stefanie Scherzinger},
-    title      = {{Josch: Managing Schemas for NoSQL Document Stores}},     # <- Add another pair of curly brackets to keep upper/lower case.
+    title      = {{Josch: Managing Schemas for NoSQL Document Stores}},     # <- Add another pair of curly brackets to keep upper/lower case
     booktitle  = {Proc.\ ICDE},             # <- Rewrite booktitle     
     _booktitle = {37th {IEEE} International Conference on Data Engineering, {ICDE} 2021,
                   Chania, Greece, April 19-22, 2021},
