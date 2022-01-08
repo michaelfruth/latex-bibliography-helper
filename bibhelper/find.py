@@ -7,7 +7,7 @@ import bibtexparser
 from bibhelper.config import is_rewrite_booktitle, is_sort_attributes, get_attribute_names, get_hide_prefix, \
     get_config_property
 from bibhelper.handler.bibtex_handler import apply_bibtex_writer_style, create_attributes_order
-from bibhelper.util import curlify_title, hide_attributes, rewrite_booktitle
+from bibhelper.util import curlify_title, hide_attributes, rewrite_booktitle, copy_to_clipboard
 from bibtexparser.bwriter import BibTexWriter
 
 logger = logging.getLogger(__name__)
@@ -143,7 +143,7 @@ def load_bibitem(publication, curlify, pretty):
     return bib
 
 
-def find(title, curlify, copy_to_clipboard, pretty):
+def find(title, curlify, is_copy_to_clipboard, pretty):
     publications_url = get_config_property("settings", "search", "publicationUrl")
     publications_url = publications_url.format(title)  # Set title as query in  URL
 
@@ -158,6 +158,6 @@ def find(title, curlify, copy_to_clipboard, pretty):
     if publication:
         item = load_bibitem(publication, curlify, pretty)
 
-        if copy_to_clipboard:
+        if is_copy_to_clipboard:
             copy_to_clipboard(item)
         print(item)

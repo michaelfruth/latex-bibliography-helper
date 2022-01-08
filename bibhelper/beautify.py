@@ -3,7 +3,8 @@ import logging
 import bibtexparser
 from bibhelper.config import is_sort_attributes, is_rewrite_booktitle
 from bibhelper.handler.bibtex_handler import apply_bibtex_writer_style, create_attributes_order
-from bibhelper.util import curlify_title, rewrite_booktitle, get_attribute_names, hide_attributes, get_hide_prefix
+from bibhelper.util import curlify_title, rewrite_booktitle, get_attribute_names, hide_attributes, get_hide_prefix, \
+    copy_to_clipboard
 from bibtexparser.bwriter import BibTexWriter
 
 logger = logging.getLogger(__name__)
@@ -38,13 +39,13 @@ def style(bib_database, curlify, pretty):
     return bib
 
 
-def beautify(content, curlify, copy_to_clipboard, pretty):
+def beautify(content, curlify, is_copy_to_clipboard, pretty):
     parser = bibtexparser.bparser.BibTexParser(ignore_nonstandard_types=False,
                                                common_strings=True)
     bib_database = bibtexparser.loads(content, parser=parser)
 
     content = style(bib_database, curlify, pretty)
 
-    if copy_to_clipboard:
+    if is_copy_to_clipboard:
         copy_to_clipboard(content)
     print(content)

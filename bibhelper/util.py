@@ -1,8 +1,8 @@
 import pyperclip
 
 from bibhelper.config import get_config_property, get_attribute_names, get_hide_prefix
-from bibhelper.handler.bibtex_handler import hide_attributes
-from bibhelper.handler.latex_handler import curlify, extract_booktitle_shortname
+from bibhelper.handler import bibtex_handler
+from bibhelper.handler import latex_handler
 
 
 def rewrite_booktitle(bib_entry: dict) -> None:
@@ -12,7 +12,7 @@ def rewrite_booktitle(bib_entry: dict) -> None:
 
     # Get existing booktitle and extract shortname (e.g. ICDE, SIGMOD, ...)
     booktitle = bib_entry[key]
-    booktitle_shortname = extract_booktitle_shortname(booktitle)
+    booktitle_shortname = latex_handler.extract_booktitle_shortname(booktitle)
 
     if booktitle_shortname is None:
         return
@@ -46,13 +46,13 @@ def rewrite_booktitle(bib_entry: dict) -> None:
 def hide_attributes(bib_entry: dict):
     hide_prefix = get_hide_prefix()
     attributes_to_hide = get_attribute_names(hidden_only=True)
-    hide_attributes(bib_entry, attributes_to_hide, hide_prefix)
+    bibtex_handler.hide_attributes(bib_entry, attributes_to_hide, hide_prefix)
 
 
 def curlify_title(bib_entry: dict):
     key = "title"
     if key in bib_entry:
-        bib_entry[key] = curlify(bib_entry[key])
+        bib_entry[key] = latex_handler.curlify(bib_entry[key])
 
 
 def copy_to_clipboard(content) -> None:
