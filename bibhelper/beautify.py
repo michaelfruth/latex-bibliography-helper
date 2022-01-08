@@ -1,10 +1,9 @@
 import logging
 
 import bibtexparser
-from bibhelper.config import is_sort_attributes, is_rewrite_booktitle
-from bibhelper.handler.bibtex_handler import apply_bibtex_writer_style, create_attributes_order
-from bibhelper.util import curlify_title, rewrite_booktitle, get_attribute_names, hide_attributes, get_hide_prefix, \
-    copy_to_clipboard
+from bibhelper import config
+from bibhelper.handler import bibtex_handler
+from bibhelper.util import curlify_title, rewrite_booktitle, hide_attributes, copy_to_clipboard
 from bibtexparser.bwriter import BibTexWriter
 
 logger = logging.getLogger(__name__)
@@ -18,21 +17,21 @@ def style(bib_database, curlify, pretty):
             curlify_title(bib_entry)
         if pretty:
             hide_attributes(bib_entry)
-            if is_rewrite_booktitle():
+            if config.is_rewrite_booktitle():
                 rewrite_booktitle(bib_entry)
 
         # Collect all attributes
         all_attributes.update(list(bib_entry.keys()))
 
     writer = BibTexWriter()
-    apply_bibtex_writer_style(writer)
+    bibtex_handler.apply_bibtex_writer_style(writer)
 
     attributes_order = writer.display_order
-    if is_sort_attributes():
+    if config.is_sort_attributes():
         # Order attributes
-        attributes_order = create_attributes_order(all_attributes,
-                                                   get_attribute_names(),
-                                                   get_hide_prefix())
+        attributes_order = bibtex_handler.create_attributes_order(all_attributes,
+                                                                  config.get_attribute_names(),
+                                                                  config.get_hide_prefix())
     writer.display_order = attributes_order
 
     bib = writer.write(bib_database)

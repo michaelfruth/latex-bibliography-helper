@@ -7,8 +7,8 @@ from pathlib import Path
 import jsonschema
 
 from bibhelper import __version__
+from bibhelper import config
 from bibhelper.beautify import beautify
-from bibhelper.config import set_config
 from bibhelper.find import find
 from bibhelper.util import read_from_clipboard
 
@@ -73,7 +73,7 @@ def try_load_and_set_config(config_file: str) -> bool:
     # Validate
     try:
         jsonschema.validate(json_config, json_schema)
-        set_config(json_config)
+        config.set_config(json_config)
         logger.debug(f"Loaded configuratil file {config_file} successfully.")
         return True
     except jsonschema.exceptions.ValidationError as e:

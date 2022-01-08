@@ -1,6 +1,6 @@
 import pyperclip
 
-from bibhelper.config import get_config_property, get_attribute_names, get_hide_prefix
+from bibhelper import config
 from bibhelper.handler import bibtex_handler
 from bibhelper.handler import latex_handler
 
@@ -19,11 +19,11 @@ def rewrite_booktitle(bib_entry: dict) -> None:
 
     # Create new booktitle based on configuration. E.g. Configuration is: "Proc.\ {}" and new title will be:
     # E.g. "Proc.\ ICDE"
-    new_booktitle_placeholder = get_config_property("style", "rewriteBooktitle", "nameWithPlaceholder")
+    new_booktitle_placeholder = config.get_config_property("style", "rewriteBooktitle", "nameWithPlaceholder")
     new_booktitle = new_booktitle_placeholder.format(booktitle_shortname)
 
     # Now we have to hide the old booktitle and create a new entry
-    hide_prefix = get_hide_prefix()
+    hide_prefix = config.get_hide_prefix()
 
     # Search for a new name of the original entry:
     # E.g. booktitle = "In Proceedings of ICDE...."
@@ -44,8 +44,8 @@ def rewrite_booktitle(bib_entry: dict) -> None:
 
 
 def hide_attributes(bib_entry: dict):
-    hide_prefix = get_hide_prefix()
-    attributes_to_hide = get_attribute_names(hidden_only=True)
+    hide_prefix = config.get_hide_prefix()
+    attributes_to_hide = config.get_attribute_names(hidden_only=True)
     bibtex_handler.hide_attributes(bib_entry, attributes_to_hide, hide_prefix)
 
 
