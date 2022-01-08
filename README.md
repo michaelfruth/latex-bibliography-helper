@@ -1,4 +1,4 @@
-# LaTex Bibliography Helper
+# LaTeX Bibliography Helper
 
 This tool helps in handling bibliography for BibTeX (a bibliography manager for LaTeX). It consists of two modules:
 
@@ -16,7 +16,18 @@ This tool uses the REST-API of [dblp](https://dblp.org) to search for references
     - Automatic rewriting of the booktitle attribute
     - Hiding of attributes (hiding in the sense of LaTex will ignore these fields during processing)
 
+## Configuration
+`latex_bibtex_helper` requires a configuration file. If no file could be found or loaded properly, the tool aborts. The following locations will be used to load the configuration file:
+1. Command line argument `--config`
+2. Environment variable: `LATEX_BIBTEX_HELPER_CONFIG`
+3. Home directory: `~/.latex_bibtex_helper_config.json`
+4. Default file (shipped with the package): [bibhelper/resources/latex_bibtex_helper_config.json](bibhelper/resources/latex_bibtex_helper_config.json)
+
+See [`--config`](#--config) for a full explanation of the configuration file.
+
+
 ## Quick Start
+### TODO: REWORK
 1. Download the project and change into this directory:
 ```shell
 git clone https://github.com/michaelfruth/latex-bibliography-helper.git
@@ -69,8 +80,8 @@ See `latex_bib_helper.py --help` for a full list of all arguments. Below are the
 ### `--config`
 
 The tool is controlled by a configuration file. This configuration file contains (1) settings of the tool and (2) the
-formatting rules of the BibTeX entries. See [example-config.json](latex_bibliography_helper/example-config.json) for an
-example configuration file. The default value is `config.json`, i.e., when `--config` is not set, it is assumed that the following file exists: `latex_bibliography_helper/config.json`.
+formatting rules of the BibTeX entries. See [bibhelper/resources/latex_bibtex_helper_config.json](bibhelper/resources/latex_bibtex_helper_config.json) for an
+example configuration file.
 
 Example configuration file:
 
