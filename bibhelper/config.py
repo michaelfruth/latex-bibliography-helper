@@ -1,22 +1,4 @@
 _config = None
-_default_config = {
-    "settings": {
-        "search": {
-            "publicationUrl": "http://dblp.org/search/publ/api?q={}&format=json",
-            "authorUrl": "http://dblp.org/search/author/api?q={}&format=json",
-            "venueUrl": "http://dblp.org/search/venue/api?q={}&format=json"
-        }
-    },
-    "style": {
-        "hidePrefix": "_",
-        "sort": True,
-        "rewriteBooktitle": {
-            "rewrite": True,
-            "nameWithPlaceholder": "Proc.\\ {}"
-        },
-        "attributes": []
-    }
-}
 
 
 def get_hide_prefix() -> str:
@@ -72,6 +54,6 @@ def get_config_property(*args):
     return current_element
 
 
-def set_config_or_default(config=None):
+def set_config(config: dict):
     global _config
-    _config = config if config is not None else _default_config
+    _config = config
