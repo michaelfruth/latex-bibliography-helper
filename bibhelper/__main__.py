@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import pkgutil
 from argparse import ArgumentParser, FileType
 from pathlib import Path
 
@@ -14,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-CONFIG_FILE_DEFAULT_NAME = ".latex_bibtex_helper_config.json"
 CONFIG_FILE_ENV_NAME = "LATEX_BIBTEX_HELPER_CONFIG"
-CONFIG_FILE_HOME_NAME = CONFIG_FILE_DEFAULT_NAME
+CONFIG_FILE_HOME_NAME = ".latex_bibtex_helper_config.json"
+CONFIG_FILE_DEFAULT_NAME = "latex_bibtex_helper_config.json"
 
 
 def load_configuration(config_file_args: str) -> None:
@@ -30,7 +29,7 @@ def load_configuration(config_file_args: str) -> None:
     else:
         config_file_env = None
     config_file_home = os.path.join(Path.home(), CONFIG_FILE_HOME_NAME)
-    config_file_default = os.path.join(SCRIPT_DIRECTORY, CONFIG_FILE_HOME_NAME)
+    config_file_default = os.path.join(SCRIPT_DIRECTORY, "resources", CONFIG_FILE_DEFAULT_NAME)
 
     # Order configuration files
     configuration_files = [config_file_args,
@@ -64,8 +63,9 @@ def try_load_and_set_config(config_file: str) -> bool:
     with open(config_file, "r") as f:
         # Load config file
         json_config = json.load(f)
-    # Load schema
-    json_schema = json.loads(pkgutil.get_data(__name__, "resources/config.schema.json"))
+    with open(os.path.join(SCRIPT_DIRECTORY, "resources", "config.schema.json"), "r") as f:
+        # Load schema
+        json_schema = json.load(f)
 
     # Validate
     try:
