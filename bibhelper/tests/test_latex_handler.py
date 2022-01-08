@@ -2,7 +2,7 @@ import unittest
 
 try:
     # When executed within PyCharm
-    import latex_bibliography_helper.handler.latex_handler as latex_handler
+    import bibhelper.handler.latex_handler as latex_handler
 except ImportError:
     # When executed in the root directory as:
     # pyton -m unittest tests.test_latex_handler
