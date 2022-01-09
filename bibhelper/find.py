@@ -5,8 +5,9 @@ import requests
 
 import bibtexparser
 from bibhelper import config
+from bibhelper import handler_util
 from bibhelper.handler import bibtex_handler
-from bibhelper.util import curlify_title, hide_attributes, rewrite_booktitle, copy_to_clipboard
+from bibhelper.util import copy_to_clipboard
 from bibtexparser.bwriter import BibTexWriter
 
 logger = logging.getLogger(__name__)
@@ -121,11 +122,11 @@ def load_bibitem(publication, curlify, pretty):
     bib_entry = bib_database.entries[0]
 
     if curlify:
-        curlify_title(bib_entry)
+        handler_util.curlify_title(bib_entry)
     if pretty:
-        hide_attributes(bib_entry)
+        handler_util.hide_attributes(bib_entry)
         if config.is_rewrite_booktitle():
-            rewrite_booktitle(bib_entry)
+            handler_util.rewrite_booktitle(bib_entry)
 
     writer = BibTexWriter()
     bibtex_handler.apply_bibtex_writer_style(writer)
