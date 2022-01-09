@@ -16,9 +16,9 @@ logger = logging.getLogger(__name__)
 
 SCRIPT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-CONFIG_FILE_ENV_NAME = "LATEX_BIBTEX_HELPER_CONFIG"
-CONFIG_FILE_HOME_NAME = ".latex_bibtex_helper_config.json"
-CONFIG_FILE_DEFAULT_NAME = "latex_bibtex_helper_config.json"
+CONFIG_FILE_ENV_NAME = "LATEX_BIB_HELPER_CONFIG"
+CONFIG_FILE_HOME_NAME = ".latex_bib_helper_config.json"
+CONFIG_FILE_DEFAULT_NAME = "latex_bib_helper_config.json"
 
 
 def load_configuration(config_file_args: str) -> None:

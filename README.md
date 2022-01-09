@@ -63,9 +63,9 @@ Beautified BibTeX entry (attributes are ordered):
 ## Configuration
 `bibhelper` *requires* a configuration file. If no configuration file can be found or loaded properly, the tool aborts. The following locations will be used to load the configuration file:
 1. Command line argument `--config`
-2. Environment variable: `LATEX_BIBTEX_HELPER_CONFIG`
-3. Home directory: `~/.latex_bibtex_helper_config.json`
-4. Default file (shipped with the package): [bibhelper/resources/latex_bibtex_helper_config.json](bibhelper/resources/latex_bibtex_helper_config.json)
+2. Environment variable: `LATEX_BIB_HELPER_CONFIG`
+3. Home directory: `~/.latex_bib_helper_config.json`
+4. Default file (shipped with the package): [bibhelper/resources/latex_bib_helper_config.json](bibhelper/resources/latex_bib_helper_config.json)
 
 See Section [`--config`](#--config) for a detailed explanation of the configuration file.
 
@@ -91,7 +91,7 @@ See `bibhelper --help` for a full list of all arguments. Below are the most impo
 ### `--config`
 
 The tool is controlled by a configuration file. This configuration file contains (1) settings of the tool and (2) the
-formatting rules of the BibTeX entries. See [bibhelper/resources/latex_bibtex_helper_config.json](bibhelper/resources/latex_bibtex_helper_config.json) for an
+formatting rules of the BibTeX entries. See [bibhelper/resources/latex_bib_helper_config.json](bibhelper/resources/latex_bib_helper_config.json) for an
 example configuration file. The configuration file **must** be valid against this schema: [bibhelper/resources/config.schema.json](bibhelper/resources/config.schema.json).
 
 Example configuration file:
