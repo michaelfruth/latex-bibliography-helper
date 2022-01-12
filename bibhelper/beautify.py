@@ -1,11 +1,9 @@
 import logging
 
-import bibtexparser
 from bibhelper import config
 from bibhelper import handler_util
 from bibhelper.handler import bibtex_handler
 from bibhelper.util import copy_to_clipboard
-from bibtexparser.bwriter import BibTexWriter
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +22,7 @@ def style(bib_database, curlify, pretty):
         # Collect all attributes
         all_attributes.update(list(bib_entry.keys()))
 
-    writer = BibTexWriter()
-    bibtex_handler.apply_bibtex_writer_style(writer)
+    writer = bibtex_handler.get_bibtex_writer()
 
     attributes_order = writer.display_order
     if config.is_sort_attributes():
@@ -40,9 +37,7 @@ def style(bib_database, curlify, pretty):
 
 
 def beautify(content, curlify, is_copy_to_clipboard, pretty):
-    parser = bibtexparser.bparser.BibTexParser(ignore_nonstandard_types=False,
-                                               common_strings=True)
-    bib_database = bibtexparser.loads(content, parser=parser)
+    bib_database = bibtex_handler.load_bibtex_database(content)
 
     content = style(bib_database, curlify, pretty)
 

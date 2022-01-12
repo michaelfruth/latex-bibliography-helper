@@ -1,6 +1,27 @@
 import re
 
+import bibtexparser
+from bibtexparser.bparser import BibTexParser
 from bibtexparser.bwriter import BibTexWriter
+
+
+def get_bibtex_writer() -> BibTexWriter:
+    """
+    Returns a BibTexWriter for which style properties are applied.
+    """
+    writer = BibTexWriter()
+    writer.indent = " " * 4
+    writer.order_entries_by = None
+    writer.align_values = True
+    writer.align_multiline_values = False
+    return writer
+
+
+def load_bibtex_database(content):
+    parser = BibTexParser(ignore_nonstandard_types=False,
+                          common_strings=True)
+    bib_database = bibtexparser.loads(content, parser=parser)
+    return bib_database
 
 
 def create_attributes_order(current_attributes: [str], plain_attributes_order: [str], hide_prefix: str) -> [str]:
@@ -72,12 +93,3 @@ def hide_attributes(bib_entry: dict, attributes_to_hide: [str], hide_prefix: str
         # Delete original "visible" attribute (without the prefix)
         del bib_entry[attribute_name]
 
-
-def apply_bibtex_writer_style(writer: BibTexWriter) -> None:
-    """
-    Applies the common BibTeX style properties to the writer.
-    """
-    writer.indent = " " * 4
-    writer.order_entries_by = None
-    writer.align_values = True
-    writer.align_multiline_values = False

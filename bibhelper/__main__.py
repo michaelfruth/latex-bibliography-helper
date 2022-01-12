@@ -10,6 +10,7 @@ from bibhelper import __version__
 from bibhelper import config
 from bibhelper.beautify import beautify
 from bibhelper.find import find
+from bibhelper.grep import grep
 from bibhelper.util import read_from_clipboard
 
 logger = logging.getLogger(__name__)
@@ -127,6 +128,24 @@ def main():
                              help="Title of publication.",
                              nargs="+")
 
+    grep_parser = subparsers.add_parser("Grep")
+    grep_parser.add_argument(dest="keyword",
+                             help="The keyword that should be contained in the BibTeX entry to grep the key from.",
+                             nargs="+")
+    grep_parser.add_argument("--use-highest-similarity",
+                             dest="use_highest_similarity",
+                             help="Automatically use the highest similarity as output.",
+                             action="store_false")
+    grep_input_group = grep_parser.add_mutually_exclusive_group(required=True)
+    grep_input_group.add_argument("-f", "--file",
+                                    dest="input_file",
+                                    type=FileType('r', encoding='UTF-8'),
+                                    help="The file to pretty print")
+    grep_input_group.add_argument("-cfc", "--copy-from-clipboard",
+                                    dest="input_clipboard",
+                                    action="store_true",
+                                    help="Use the clipboard")
+
     pretty_parser = subparsers.add_parser("Beautify")
     pretty_input_group = pretty_parser.add_mutually_exclusive_group(required=True)
     pretty_input_group.add_argument("-f", "--file",
@@ -146,14 +165,20 @@ def main():
     if args.command == "Find":
         title = " ".join(args.title)
         find(title, args.curlify, args.copy_to_clipboard, args.pretty)
-    elif args.command == "Beautify":
+    elif args.command == "Beautify" or args.command == "Grep":
         if args.input_clipboard:
-            beautify_content = read_from_clipboard()
+            input_content = read_from_clipboard()
         else:
             input_file = args.input_file
-            beautify_content = input_file.read()
+            input_content = input_file.read()
             input_file.close()
-        beautify(beautify_content, args.curlify, args.copy_to_clipboard, args.pretty)
+        if args.command == "Beautify":
+            beautify(input_content, args.curlify, args.copy_to_clipboard, args.pretty)
+        elif args.command == "Grep":
+            keyword = " ".join(args.keyword)
+            grep(input_content, keyword, args.use_highest_similarity)
+        else:
+            raise ValueError("Unknown ArgumentParser option: {}".format(args.command))
     else:
         raise ValueError("Unknown ArgumentParser option: {}".format(args.command))
 

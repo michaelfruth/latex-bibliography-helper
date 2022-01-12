@@ -8,7 +8,6 @@ from bibhelper import config
 from bibhelper import handler_util
 from bibhelper.handler import bibtex_handler
 from bibhelper.util import copy_to_clipboard
-from bibtexparser.bwriter import BibTexWriter
 
 logger = logging.getLogger(__name__)
 
@@ -128,8 +127,7 @@ def load_bibitem(publication, curlify, pretty):
         if config.is_rewrite_booktitle():
             handler_util.rewrite_booktitle(bib_entry)
 
-    writer = BibTexWriter()
-    bibtex_handler.apply_bibtex_writer_style(writer)
+    writer = bibtex_handler.get_bibtex_writer()
 
     attributes_order = writer.display_order
     if config.is_sort_attributes():
