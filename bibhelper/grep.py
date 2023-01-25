@@ -1,12 +1,13 @@
 from difflib import SequenceMatcher
 
-from bibhelper.handler import bibtex_handler
 from bibhelper import config
+from bibhelper.handler import bibtex_handler
 from bibtexparser.bibdatabase import BibDatabase
 
 
 def output_result(entry_with_similarity):
     entry, similarity = entry_with_similarity
+
     print("Found match with similarity of {} (1 is max.).".format(similarity))
 
     writer = bibtex_handler.get_bibtex_writer()
@@ -14,8 +15,9 @@ def output_result(entry_with_similarity):
     bib_database = BibDatabase()
     bib_database.entries = [entry]
     bib = writer.write(bib_database)
+
     print(bib.strip())
-    print()
+    print()  # Print empty line; bib is stripped
     print("Key is: {}".format(entry["ID"]))
 
 
