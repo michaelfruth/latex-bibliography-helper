@@ -11,6 +11,9 @@ def extract_booktitle_shortname(booktitle: str) -> Union[str, None]:
     - Shortname followed by year: ... {SHORTNAME} YEAR ....
     - Example: 43rd {ACM/IEEE} Annual ..., {ISCA} 2016, Seoul, South Korea, June 18-22, 2016
 
+    - Shortname after the year: ... YEAR {SHORTNAME} ...
+    - Example: 2009 {USENIX} Annual Technical Conference, San Diego, CA, USA, June 14-19, 2009
+
     - Shortname at the end: ... {SHORTNAME}
     - Example: 2014 IEEE International Symposium on Workload Characterization {IISWC}
 
@@ -22,13 +25,15 @@ def extract_booktitle_shortname(booktitle: str) -> Union[str, None]:
     patterns = []
 
     shortname_year_pattern = re.compile(r'{?\w+}?(?=(\n|\r|\s)+[0-9]{4})')
-    patterns.append(shortname_year_pattern)
-
+    year_shortname_pattern = re.compile(r'(?:[0-9]{4})(?:\n|\r|\s)+({?\w+}?)')
     shortname_end_pattern = re.compile(r'{[^{]*}$')
-    patterns.append(shortname_end_pattern)
-
     shortname_start_pattern = re.compile(r'(^{?.*}?)(?:(\n|\r|\s)+\'[0-9]{2,4})')
+    
+    # The first matching pattern is applied
+    patterns.append(shortname_year_pattern)
+    patterns.append(shortname_end_pattern)
     patterns.append(shortname_start_pattern)
+    patterns.append(year_shortname_pattern)
 
     for shortname_pattern in patterns:
         findings = re.search(shortname_pattern, booktitle)
